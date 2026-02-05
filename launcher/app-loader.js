@@ -163,7 +163,7 @@ class AppLoader {
     if (!query || !query.trim()) return this.apps;
 
     const normalizedQuery = query.toLowerCase().trim();
-    const threshold = 0.4; // Allow up to 40% difference
+    const threshold = 0.25; // Allow up to 25% difference for tighter matching
 
     // Score each app
     const scored = this.apps.map(app => {

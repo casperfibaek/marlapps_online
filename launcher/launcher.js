@@ -154,6 +154,13 @@ class Launcher {
           e.preventDefault();
           return;
         }
+
+        // Reset to 'all apps' if a specific category is selected
+        if (this.currentCategory !== 'all' && !this.settingsManager.isOpen) {
+          this.setCategory('all');
+          e.preventDefault();
+          return;
+        }
       }
     });
 
