@@ -109,6 +109,16 @@ body.app-open .topbar-center {
   pointer-events: none;
 }
 
+/* Mobile-only topbar buttons (search, categories) - hidden on desktop */
+.topbar-mobile-btn {
+  display: none;
+}
+
+/* Hide mobile topbar buttons when app is open */
+body.app-open .topbar-mobile-btn {
+  display: none !important;
+}
+
 .search-wrapper {
   position: relative;
   width: 100%;
@@ -525,7 +535,7 @@ body.app-open .topbar-center {
 .app-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: var(--grid-gap);
+  gap: 0;
 }
 
 /* List/Compact view - single column */
@@ -666,7 +676,13 @@ body.app-open .topbar-center {
   width: 100%;
   height: 100%;
   border: none;
-  background: var(--surface-primary);
+  background: var(--window-fill);
+  opacity: 0;
+  transition: opacity 0.15s ease-in;
+}
+
+.app-iframe.loaded {
+  opacity: 1;
 }
 
 /* Settings Drawer */
@@ -1149,8 +1165,13 @@ body.app-open .topbar-center {
     display: none;
   }
 
-  /* Show mobile navigation */
+  /* Hide mobile bottom navigation - using topbar buttons instead */
   .mobile-nav {
+    display: none;
+  }
+
+  /* Show mobile topbar buttons (search, categories) */
+  .topbar-mobile-btn {
     display: flex;
   }
 
@@ -1159,9 +1180,14 @@ body.app-open .topbar-center {
     display: none;
   }
 
-  /* Add padding for mobile nav */
+  /* Ensure topbar-right buttons float right on mobile */
+  .topbar-right {
+    margin-left: auto;
+  }
+
+  /* Padding for bottom safe area */
   .main-content {
-    padding-bottom: calc(64px + var(--space-5) + env(safe-area-inset-bottom, 0));
+    padding-bottom: calc(var(--space-5) + env(safe-area-inset-bottom, 0));
   }
 
   .app-grid {

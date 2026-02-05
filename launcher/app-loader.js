@@ -92,20 +92,97 @@ class AppLoader {
   }
 
   /**
-   * Search apps by query
+   * Calculate Damerau-Levenshtein distance between two strings
+   */
+  damerauLevenshtein(a, b) {
+    const lenA = a.length;
+    const lenB = b.length;
+
+    if (lenA === 0) return lenB;
+    if (lenB === 0) return lenA;
+
+    // Create distance matrix
+    const d = Array(lenA + 1).fill(null).map(() => Array(lenB + 1).fill(0));
+
+    for (let i = 0; i <= lenA; i++) d[i][0] = i;
+    for (let j = 0; j <= lenB; j++) d[0][j] = j;
+
+    for (let i = 1; i <= lenA; i++) {
+      for (let j = 1; j <= lenB; j++) {
+        const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+
+        d[i][j] = Math.min(
+          d[i - 1][j] + 1,       // deletion
+          d[i][j - 1] + 1,       // insertion
+          d[i - 1][j - 1] + cost // substitution
+        );
+
+        // Transposition
+        if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) {
+          d[i][j] = Math.min(d[i][j], d[i - 2][j - 2] + cost);
+        }
+      }
+    }
+
+    return d[lenA][lenB];
+  }
+
+  /**
+   * Calculate fuzzy match score (0 = perfect match, higher = worse)
+   */
+  getFuzzyScore(query, text) {
+    const q = query.toLowerCase();
+    const t = text.toLowerCase();
+
+    // Exact match or contains
+    if (t.includes(q)) return 0;
+
+    // Check each word
+    const words = t.split(/\s+/);
+    let bestScore = Infinity;
+
+    for (const word of words) {
+      const distance = this.damerauLevenshtein(q, word);
+      // Normalize by max length to get relative score
+      const normalizedScore = distance / Math.max(q.length, word.length);
+      bestScore = Math.min(bestScore, normalizedScore);
+    }
+
+    // Also check against full text for partial matches
+    const fullDistance = this.damerauLevenshtein(q, t.substring(0, q.length + 2));
+    const fullNormalized = fullDistance / Math.max(q.length, t.length);
+    bestScore = Math.min(bestScore, fullNormalized);
+
+    return bestScore;
+  }
+
+  /**
+   * Search apps by query using fuzzy matching
    */
   searchApps(query) {
     if (!query || !query.trim()) return this.apps;
 
     const normalizedQuery = query.toLowerCase().trim();
+    const threshold = 0.4; // Allow up to 40% difference
 
-    return this.apps.filter(app =>
-      app.name.toLowerCase().includes(normalizedQuery) ||
-      app.description.toLowerCase().includes(normalizedQuery) ||
-      (app.categories && app.categories.some(c =>
-        c.toLowerCase().includes(normalizedQuery)
-      ))
-    );
+    // Score each app
+    const scored = this.apps.map(app => {
+      const nameScore = this.getFuzzyScore(normalizedQuery, app.name);
+      const descScore = this.getFuzzyScore(normalizedQuery, app.description);
+      const catScore = app.categories
+        ? Math.min(...app.categories.map(c => this.getFuzzyScore(normalizedQuery, c)))
+        : Infinity;
+
+      const bestScore = Math.min(nameScore, descScore * 1.5, catScore * 1.2);
+
+      return { app, score: bestScore };
+    });
+
+    // Filter by threshold and sort by score
+    return scored
+      .filter(item => item.score <= threshold)
+      .sort((a, b) => a.score - b.score)
+      .map(item => item.app);
   }
 
   /**

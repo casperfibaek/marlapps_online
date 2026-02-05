@@ -84,6 +84,25 @@ class Launcher {
         if (this.currentApp) {
           this.closeApp();
         }
+        // Always show all apps when clicking home
+        this.setCategory('all');
+        this.closeMobileOverlays();
+      });
+    }
+
+    // Topbar search button (mobile)
+    const topbarSearchBtn = document.getElementById('topbarSearchBtn');
+    if (topbarSearchBtn) {
+      topbarSearchBtn.addEventListener('click', () => {
+        this.openMobileSearch();
+      });
+    }
+
+    // Topbar categories button (mobile)
+    const topbarCategoriesBtn = document.getElementById('topbarCategoriesBtn');
+    if (topbarCategoriesBtn) {
+      topbarCategoriesBtn.addEventListener('click', () => {
+        this.openMobileCategoriesSheet();
       });
     }
 
@@ -112,9 +131,29 @@ class Launcher {
 
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
-      // Escape to close app (if not in settings or search)
-      if (e.key === 'Escape' && this.currentApp && !this.settingsManager.isOpen) {
-        this.closeApp();
+      if (e.key === 'Escape') {
+        // Close mobile search overlay if open
+        const mobileSearchOverlay = document.getElementById('mobileSearchOverlay');
+        if (mobileSearchOverlay && !mobileSearchOverlay.classList.contains('hidden')) {
+          this.closeMobileSearch();
+          e.preventDefault();
+          return;
+        }
+
+        // Close mobile categories sheet if open
+        const mobileCategoriesSheet = document.getElementById('mobileCategoriesSheet');
+        if (mobileCategoriesSheet && !mobileCategoriesSheet.classList.contains('hidden')) {
+          this.closeMobileCategoriesSheet();
+          e.preventDefault();
+          return;
+        }
+
+        // Close app (if not in settings)
+        if (this.currentApp && !this.settingsManager.isOpen) {
+          this.closeApp();
+          e.preventDefault();
+          return;
+        }
       }
     });
 
@@ -541,6 +580,14 @@ class Launcher {
         sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals"
       ></iframe>
     `;
+
+    // Fade in iframe when loaded to prevent theme flicker
+    const iframe = content.querySelector('.app-iframe');
+    if (iframe) {
+      iframe.addEventListener('load', () => {
+        iframe.classList.add('loaded');
+      });
+    }
 
     // Show workspace, hide main
     mainContent.classList.add('hidden');
