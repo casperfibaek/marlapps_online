@@ -1,6 +1,6 @@
 // Service Worker for offline support - MarlApps v2.0
 
-const CACHE_NAME = 'marlapps-v17';
+const CACHE_NAME = 'marlapps-v19';
 const urlsToCache = [
   './',
   './index.html',
@@ -11,6 +11,8 @@ const urlsToCache = [
   './themes/tokens.css',
   './themes/dark.css',
   './themes/light.css',
+  './themes/futuristic.css',
+  './themes/amalfi.css',
   './themes/app-common.css',
 
   // Launcher

@@ -22,19 +22,24 @@
   <link rel="stylesheet" href="./themes/tokens.css">
   <link rel="stylesheet" href="./themes/dark.css">
   <link rel="stylesheet" href="./themes/light.css">
+  <link rel="stylesheet" href="./themes/futuristic.css">
+  <link rel="stylesheet" href="./themes/amalfi.css">
   <link rel="stylesheet" href="./launcher/launcher.css">
 </head>
 <body>
+  <!-- Skip to content -->
+  <a href="#mainContent" class="skip-link">Skip to content</a>
+
   <!-- Background Layer -->
-  <div class="bg-layer"></div>
+  <div class="bg-layer" aria-hidden="true"></div>
 
   <!-- Main App Window -->
   <div class="app-window">
     <!-- Top Bar -->
-    <header class="topbar">
+    <header class="topbar" role="banner">
       <div class="topbar-left">
-        <button class="home-btn" id="homeBtn" title="Back to home">
-          <svg class="home-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <button class="home-btn" id="homeBtn" aria-label="Go to home screen">
+          <svg class="home-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
             <polyline points="9 22 9 12 15 12 15 22"/>
           </svg>
@@ -42,41 +47,42 @@
         </button>
       </div>
 
-      <div class="topbar-center">
+      <div class="topbar-center" role="search" aria-label="Search apps">
         <div class="search-wrapper">
-          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <circle cx="11" cy="11" r="8"/>
             <path d="M21 21l-4.35-4.35"/>
           </svg>
           <input
-            type="text"
+            type="search"
             class="search-input"
             placeholder="Search apps..."
             id="globalSearch"
             autocomplete="off"
             spellcheck="false"
+            aria-label="Search apps"
           >
-          <kbd class="search-hint">⌘K</kbd>
+          <kbd class="search-hint" aria-hidden="true">⌘K</kbd>
         </div>
       </div>
 
       <div class="topbar-right">
-        <button class="icon-btn topbar-mobile-btn" title="Search" id="topbarSearchBtn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <button class="icon-btn topbar-mobile-btn" title="Search" id="topbarSearchBtn" aria-label="Open search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <circle cx="11" cy="11" r="8"/>
             <path d="M21 21l-4.35-4.35"/>
           </svg>
         </button>
-        <button class="icon-btn topbar-mobile-btn" title="Categories" id="topbarCategoriesBtn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <button class="icon-btn topbar-mobile-btn" title="Categories" id="topbarCategoriesBtn" aria-label="Open categories">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <rect x="3" y="3" width="7" height="7"/>
             <rect x="14" y="3" width="7" height="7"/>
             <rect x="14" y="14" width="7" height="7"/>
             <rect x="3" y="14" width="7" height="7"/>
           </svg>
         </button>
-        <button class="icon-btn" title="Settings" id="topbarSettingsBtn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <button class="icon-btn" title="Settings" id="topbarSettingsBtn" aria-label="Open settings" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <circle cx="12" cy="12" r="3"/>
             <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
           </svg>
@@ -87,11 +93,11 @@
     <!-- Body (Sidebar + Main) -->
     <div class="app-body">
       <!-- Sidebar -->
-      <aside class="sidebar">
-        <nav class="sidebar-nav">
-          <ul class="nav-list">
-            <li class="nav-item active" data-category="all" tabindex="0" role="button">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <aside class="sidebar" aria-label="App categories">
+        <nav class="sidebar-nav" aria-label="Categories">
+          <ul class="nav-list" role="listbox" aria-label="Category filter">
+            <li class="nav-item active" data-category="all" tabindex="0" role="option" aria-selected="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                 <rect x="3" y="3" width="7" height="7"/>
                 <rect x="14" y="3" width="7" height="7"/>
                 <rect x="14" y="14" width="7" height="7"/>
@@ -99,16 +105,16 @@
               </svg>
               <span>All apps</span>
             </li>
-            <li class="nav-item" data-category="focus" tabindex="0" role="button">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <li class="nav-item" data-category="focus" tabindex="0" role="option" aria-selected="false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                 <circle cx="12" cy="12" r="10"/>
                 <circle cx="12" cy="12" r="6"/>
                 <circle cx="12" cy="12" r="2"/>
               </svg>
               <span>Focus</span>
             </li>
-            <li class="nav-item" data-category="planning" tabindex="0" role="button">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <li class="nav-item" data-category="planning" tabindex="0" role="option" aria-selected="false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
                 <line x1="16" y1="2" x2="16" y2="6"/>
                 <line x1="8" y1="2" x2="8" y2="6"/>
@@ -116,8 +122,8 @@
               </svg>
               <span>Planning</span>
             </li>
-            <li class="nav-item" data-category="notes" tabindex="0" role="button">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <li class="nav-item" data-category="notes" tabindex="0" role="option" aria-selected="false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                 <polyline points="14,2 14,8 20,8"/>
                 <line x1="16" y1="13" x2="8" y2="13"/>
@@ -126,15 +132,15 @@
               </svg>
               <span>Notes</span>
             </li>
-            <li class="nav-item" data-category="personal" tabindex="0" role="button">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <li class="nav-item" data-category="personal" tabindex="0" role="option" aria-selected="false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
                 <circle cx="12" cy="7" r="4"/>
               </svg>
               <span>Personal</span>
             </li>
-            <li class="nav-item" data-category="tools" tabindex="0" role="button">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <li class="nav-item" data-category="tools" tabindex="0" role="option" aria-selected="false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                 <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
               </svg>
               <span>Tools</span>
@@ -145,51 +151,32 @@
       </aside>
 
       <!-- Main Content -->
-      <main class="main-content" id="mainContent">
+      <main class="main-content" id="mainContent" aria-label="App launcher">
         <!-- Recents Section -->
-        <section class="recents-section">
+        <section class="recents-section" aria-label="Recently used apps">
           <div class="section-header">
             <h2 class="section-title">Recents</h2>
           </div>
-          <div class="recents-scroller" id="recentsScroller">
+          <div class="recents-scroller" id="recentsScroller" role="list" aria-label="Recent apps">
             <!-- Recent tiles rendered by JS -->
           </div>
         </section>
 
         <!-- Grid Toolbar -->
         <div class="grid-toolbar">
-          <h2 class="toolbar-title">All apps</h2>
+          <h2 class="toolbar-title" id="gridTitle" aria-live="polite">All apps</h2>
           <div class="toolbar-controls">
+            <label for="sortSelect" class="sr-only">Sort apps by</label>
             <select class="sort-select" id="sortSelect">
               <option value="recent">Recently used</option>
               <option value="alpha">A to Z</option>
               <option value="category">Category</option>
             </select>
-            <div class="density-toggle">
-              <button class="density-btn active" data-density="comfortable" title="Comfortable">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="3" y="3" width="7" height="7"/>
-                  <rect x="14" y="3" width="7" height="7"/>
-                  <rect x="14" y="14" width="7" height="7"/>
-                  <rect x="3" y="14" width="7" height="7"/>
-                </svg>
-              </button>
-              <button class="density-btn" data-density="compact" title="Compact">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <line x1="8" y1="6" x2="21" y2="6"/>
-                  <line x1="8" y1="12" x2="21" y2="12"/>
-                  <line x1="8" y1="18" x2="21" y2="18"/>
-                  <line x1="3" y1="6" x2="3.01" y2="6"/>
-                  <line x1="3" y1="12" x2="3.01" y2="12"/>
-                  <line x1="3" y1="18" x2="3.01" y2="18"/>
-                </svg>
-              </button>
-            </div>
           </div>
         </div>
 
         <!-- App Grid -->
-        <div class="app-grid" id="appGrid">
+        <div class="app-grid" id="appGrid" role="list" aria-label="Applications" aria-live="polite">
           <!-- App cards rendered by JS -->
         </div>
 
@@ -200,7 +187,7 @@
       </main>
 
       <!-- App Workspace (for embedded apps) -->
-      <div class="app-workspace hidden" id="appWorkspace">
+      <div class="app-workspace hidden" id="appWorkspace" role="region" aria-label="App workspace">
         <div class="workspace-content" id="workspaceContent">
           <!-- App iframe or embedded content -->
         </div>
@@ -209,11 +196,11 @@
   </div>
 
   <!-- Settings Drawer -->
-  <div class="settings-drawer" id="settingsDrawer">
+  <div class="settings-drawer" id="settingsDrawer" role="dialog" aria-modal="true" aria-labelledby="settingsTitle" aria-hidden="true">
     <div class="drawer-header">
-      <h2>Settings</h2>
-      <button class="close-btn" id="closeSettingsBtn" title="Close">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <h2 id="settingsTitle">Settings</h2>
+      <button class="close-btn" id="closeSettingsBtn" aria-label="Close settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <path d="M18 6L6 18M6 6l12 12"/>
         </svg>
       </button>
@@ -232,6 +219,14 @@
             <span class="theme-preview light"></span>
             <span>Light</span>
           </button>
+          <button class="theme-option" data-theme="futuristic">
+            <span class="theme-preview futuristic"></span>
+            <span>Futuristic</span>
+          </button>
+          <button class="theme-option" data-theme="amalfi">
+            <span class="theme-preview amalfi"></span>
+            <span>Amalfi</span>
+          </button>
         </div>
         <button class="text-btn" id="resetThemeBtn">Reset to default</button>
       </section>
@@ -241,7 +236,7 @@
         <h3>Data management</h3>
         <div class="settings-actions">
           <button class="action-btn" id="exportBtn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
               <polyline points="7,10 12,15 17,10"/>
               <line x1="12" y1="15" x2="12" y2="3"/>
@@ -249,7 +244,7 @@
             <span>Export data</span>
           </button>
           <button class="action-btn" id="importBtn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
               <polyline points="17,8 12,3 7,8"/>
               <line x1="12" y1="3" x2="12" y2="15"/>
@@ -257,7 +252,7 @@
             <span>Import data</span>
           </button>
           <button class="action-btn danger" id="resetDataBtn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <polyline points="3,6 5,6 21,6"/>
               <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
             </svg>
@@ -317,29 +312,30 @@
   </nav>
 
   <!-- Mobile Search Overlay -->
-  <div class="mobile-search-overlay hidden" id="mobileSearchOverlay">
+  <div class="mobile-search-overlay hidden" id="mobileSearchOverlay" role="dialog" aria-modal="true" aria-label="Search apps">
     <div class="mobile-search-header">
       <input
-        type="text"
+        type="search"
         class="mobile-search-input"
         placeholder="Search apps..."
         id="mobileSearchInput"
         autocomplete="off"
         spellcheck="false"
+        aria-label="Search apps"
       >
       <button class="mobile-search-cancel" id="mobileSearchCancel">Cancel</button>
     </div>
-    <div class="mobile-search-results" id="mobileSearchResults">
+    <div class="mobile-search-results" id="mobileSearchResults" role="list" aria-label="Search results" aria-live="polite">
       <!-- Results rendered by JS -->
     </div>
   </div>
 
   <!-- Mobile Categories Sheet -->
-  <div class="mobile-sheet hidden" id="mobileCategoriesSheet">
+  <div class="mobile-sheet hidden" id="mobileCategoriesSheet" role="dialog" aria-modal="true" aria-label="Select category">
     <div class="mobile-sheet-header">
       <h3>Categories</h3>
-      <button class="mobile-sheet-close" id="mobileCategoriesClose">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <button class="mobile-sheet-close" id="mobileCategoriesClose" aria-label="Close categories">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <path d="M18 6L6 18M6 6l12 12"/>
         </svg>
       </button>
@@ -376,11 +372,11 @@
   </div>
 
   <!-- Scripts -->
-  <script src="./launcher/pwa-install.js"></script>
-  <script src="./launcher/theme-manager.js"></script>
-  <script src="./launcher/app-loader.js"></script>
-  <script src="./launcher/search.js"></script>
-  <script src="./launcher/settings.js"></script>
-  <script src="./launcher/launcher.js"></script>
+  <script src="./launcher/pwa-install.js" defer></script>
+  <script src="./launcher/theme-manager.js" defer></script>
+  <script src="./launcher/app-loader.js" defer></script>
+  <script src="./launcher/search.js" defer></script>
+  <script src="./launcher/settings.js" defer></script>
+  <script src="./launcher/launcher.js" defer></script>
 </body>
 </html>

@@ -117,7 +117,12 @@ class SettingsManager {
   open() {
     this.drawer.classList.add('open');
     this.overlay.classList.add('visible');
+    this.drawer.setAttribute('aria-hidden', 'false');
     this.isOpen = true;
+
+    // Update trigger button state
+    const trigger = document.getElementById('topbarSettingsBtn');
+    if (trigger) trigger.setAttribute('aria-expanded', 'true');
 
     // Focus trap - focus first interactive element
     const firstFocusable = this.drawer.querySelector('button, input');
@@ -132,7 +137,12 @@ class SettingsManager {
   close() {
     this.drawer.classList.remove('open');
     this.overlay.classList.remove('visible');
+    this.drawer.setAttribute('aria-hidden', 'true');
     this.isOpen = false;
+
+    // Update trigger button state
+    const trigger = document.getElementById('topbarSettingsBtn');
+    if (trigger) trigger.setAttribute('aria-expanded', 'false');
 
     // Dispatch event for mobile nav to reset state
     window.dispatchEvent(new CustomEvent('settingsClosed'));

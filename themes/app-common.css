@@ -107,6 +107,50 @@
   --app-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
+/* Futuristic theme override (explicit) */
+[data-theme="futuristic"] {
+  --app-bg-primary: #0c0c20;
+  --app-bg-secondary: #080818;
+  --app-bg-tertiary: #12122a;
+  --app-text-primary: rgba(220, 240, 255, 0.95);
+  --app-text-secondary: rgba(140, 200, 220, 0.7);
+  --app-text-tertiary: rgba(100, 160, 180, 0.5);
+  --app-border-color: rgba(0, 229, 255, 0.12);
+  --app-border-light: rgba(0, 229, 255, 0.05);
+  --app-bg-hover: rgba(0, 229, 255, 0.06);
+  --app-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --app-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35);
+  --app-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --app-accent: #00e5ff;
+  --app-accent-hover: #00b8d4;
+  --app-success: #00e676;
+  --app-success-hover: #00c853;
+  --app-danger: #ff1744;
+  --app-danger-hover: #d50000;
+}
+
+/* Amalfi theme override (explicit) */
+[data-theme="amalfi"] {
+  --app-bg-primary: #faf4eb;
+  --app-bg-secondary: #fdfaf5;
+  --app-bg-tertiary: #f2eade;
+  --app-text-primary: rgba(62, 42, 24, 0.92);
+  --app-text-secondary: rgba(100, 72, 44, 0.65);
+  --app-text-tertiary: rgba(130, 100, 68, 0.48);
+  --app-border-color: rgba(180, 140, 90, 0.15);
+  --app-border-light: rgba(180, 140, 90, 0.08);
+  --app-bg-hover: rgba(180, 140, 90, 0.06);
+  --app-shadow-sm: 0 2px 8px rgba(140, 100, 50, 0.08);
+  --app-shadow-md: 0 4px 16px rgba(140, 100, 50, 0.1);
+  --app-shadow-lg: 0 8px 24px rgba(140, 100, 50, 0.12);
+  --app-accent: #2078b4;
+  --app-accent-hover: #186698;
+  --app-success: #2e8b57;
+  --app-success-hover: #267349;
+  --app-danger: #c0392b;
+  --app-danger-hover: #a02f24;
+}
+
 /* ===== Common Base Styles ===== */
 
 * {

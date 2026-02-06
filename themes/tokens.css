@@ -51,10 +51,10 @@
   --sidebar-width: 300px;
   --settings-drawer-width: 480px;
 
-  /* Component sizes */
-  --nav-item-height: 42px;
-  --icon-btn-size: 36px;
-  --search-height: 42px;
+  /* Component sizes (min 44px for touch targets per WCAG 2.5.8) */
+  --nav-item-height: 44px;
+  --icon-btn-size: 44px;
+  --search-height: 44px;
   --search-max-width: 820px;
   --recent-tile-width: 240px;
   --recent-tile-height: 82px;

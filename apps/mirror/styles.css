@@ -312,13 +312,41 @@
 
 /* Responsive design */
 @media (max-width: 768px) {
+  .mirror-overlay {
+    justify-content: flex-end;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
   .control-panel {
     max-width: 100%;
     align-self: stretch;
+    padding: var(--space-3);
+    margin-bottom: var(--space-2);
+  }
+
+  .control-group {
+    margin-bottom: var(--space-2);
+  }
+
+  .control-group label {
+    font-size: 0.75rem;
+    margin-bottom: 0;
+  }
+
+  .control-group input[type="range"] {
+    height: 24px;
   }
 
   .filter-buttons {
     flex-wrap: wrap;
+    gap: var(--space-1);
+  }
+
+  .filter-btn {
+    padding: var(--space-2) var(--space-3);
+    font-size: 0.8rem;
+    min-height: 36px;
   }
 
   .gallery-grid {

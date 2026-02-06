@@ -6,7 +6,7 @@ class ThemeManager {
   constructor() {
     this.storageKey = 'marlapps-theme';
     this.defaultTheme = 'dark';
-    this.supportedThemes = ['dark', 'light'];
+    this.supportedThemes = ['dark', 'light', 'futuristic', 'amalfi'];
     this.currentTheme = null;
   }
 
@@ -41,7 +41,6 @@ class ThemeManager {
       // Only apply if user hasn't explicitly set a preference
       if (!localStorage.getItem(this.storageKey)) {
         this.apply(e.matches ? 'dark' : 'light');
-        this.dispatchChange();
       }
     });
   }
@@ -59,11 +58,18 @@ class ThemeManager {
     this.currentTheme = theme;
 
     // Update meta theme-color for PWA
+    const themeColors = {
+      dark: '#0a0a0f',
+      light: '#e8e8ed',
+      futuristic: '#050510',
+      amalfi: '#f5ebe0'
+    };
     const metaThemeColor = document.querySelector('meta[name="theme-color"]');
     if (metaThemeColor) {
-      metaThemeColor.content = theme === 'dark' ? '#0a0a0f' : '#e8e8ed';
+      metaThemeColor.content = themeColors[theme] || themeColors.dark;
     }
 
+    this.dispatchChange();
     return this;
   }
 
@@ -73,7 +79,6 @@ class ThemeManager {
   toggle() {
     const next = this.currentTheme === 'dark' ? 'light' : 'dark';
     this.apply(next);
-    this.dispatchChange();
     return this;
   }
 
@@ -84,7 +89,6 @@ class ThemeManager {
     localStorage.removeItem(this.storageKey);
     const theme = this.getOSPreference() || this.defaultTheme;
     this.apply(theme);
-    this.dispatchChange();
     return this;
   }
 

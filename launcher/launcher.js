@@ -12,7 +12,6 @@ class Launcher {
     // State
     this.currentCategory = 'all';
     this.currentSort = 'recent';
-    this.currentDensity = 'comfortable';
     this.currentApp = null;
   }
 
@@ -122,13 +121,6 @@ class Launcher {
       });
     }
 
-    // Density toggle
-    document.querySelectorAll('.density-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        this.setDensity(btn.dataset.density);
-      });
-    });
-
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
@@ -161,6 +153,14 @@ class Launcher {
           e.preventDefault();
           return;
         }
+      }
+    });
+
+    // Propagate theme changes to open app iframe
+    window.addEventListener('themechange', () => {
+      const iframe = document.querySelector('.app-iframe');
+      if (iframe) {
+        this.syncThemeToIframe(iframe);
       }
     });
 
@@ -326,12 +326,12 @@ class Launcher {
 
     const apps = this.appLoader.searchApps(query);
     if (apps.length === 0) {
-      results.innerHTML = '<p class="no-results">No apps found</p>';
+      results.innerHTML = '<p class="no-results" role="status">No apps found</p>';
       return;
     }
 
     results.innerHTML = apps.map(app => `
-      <div class="app-card" data-app-id="${app.id}" tabindex="0" role="button">
+      <div class="app-card" data-app-id="${app.id}" tabindex="0" role="listitem" aria-label="Open ${this.escapeHtml(app.name)}">
         <img class="app-icon" src="${this.appLoader.getAppIconUrl(app)}" alt="" loading="lazy">
         <div class="app-info">
           <span class="app-name">${this.escapeHtml(app.name)}</span>
@@ -420,9 +420,11 @@ class Launcher {
   setCategory(category) {
     this.currentCategory = category;
 
-    // Update nav UI
+    // Update nav UI and ARIA state
     document.querySelectorAll('.nav-item[data-category]').forEach(item => {
-      item.classList.toggle('active', item.dataset.category === category);
+      const isActive = item.dataset.category === category;
+      item.classList.toggle('active', isActive);
+      item.setAttribute('aria-selected', isActive ? 'true' : 'false');
     });
 
     // Update toolbar title
@@ -438,24 +440,6 @@ class Launcher {
       this.searchManager.clear();
     }
     this.renderApps();
-  }
-
-  /**
-   * Set grid density
-   */
-  setDensity(density) {
-    this.currentDensity = density;
-
-    // Update toggle UI
-    document.querySelectorAll('.density-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.density === density);
-    });
-
-    // Update grid class
-    const grid = document.getElementById('appGrid');
-    if (grid) {
-      grid.classList.toggle('compact', density === 'compact');
-    }
   }
 
   /**
@@ -507,7 +491,7 @@ class Launcher {
     }
 
     container.innerHTML = recents.map(app => `
-      <div class="recent-tile" data-app-id="${app.id}" tabindex="0" role="button">
+      <div class="recent-tile" data-app-id="${app.id}" tabindex="0" role="listitem" aria-label="Open ${this.escapeHtml(app.name)}">
         <img class="recent-icon" src="${this.appLoader.getAppIconUrl(app)}" alt="" loading="lazy">
         <div class="recent-info">
           <span class="recent-name">${this.escapeHtml(app.name)}</span>
@@ -534,7 +518,7 @@ class Launcher {
 
     // Render cards
     const cardsHtml = apps.map(app => `
-      <div class="app-card" data-app-id="${app.id}" tabindex="0" role="button">
+      <div class="app-card" data-app-id="${app.id}" tabindex="0" role="listitem" aria-label="Open ${this.escapeHtml(app.name)}">
         <img class="app-icon" src="${this.appLoader.getAppIconUrl(app)}" alt="" loading="lazy">
         <div class="app-info">
           <span class="app-name">${this.escapeHtml(app.name)}</span>
@@ -545,8 +529,8 @@ class Launcher {
 
     // Add the "Add App" card at the end
     const addCardHtml = `
-      <div class="app-card add-app-card" id="addAppCard" tabindex="0" role="button">
-        <div class="add-icon">+</div>
+      <div class="app-card add-app-card" id="addAppCard" tabindex="0" role="listitem" aria-label="Add new app">
+        <div class="add-icon" aria-hidden="true">+</div>
         <div class="app-info">
           <span class="app-name">Add App</span>
           <span class="app-description">Coming soon</span>
@@ -588,10 +572,12 @@ class Launcher {
       ></iframe>
     `;
 
-    // Fade in iframe when loaded to prevent theme flicker
+    // Fade in iframe when loaded to prevent theme flicker, and sync theme
     const iframe = content.querySelector('.app-iframe');
     if (iframe) {
       iframe.addEventListener('load', () => {
+        // Sync theme to iframe
+        this.syncThemeToIframe(iframe);
         iframe.classList.add('loaded');
       });
     }
@@ -635,6 +621,20 @@ class Launcher {
 
     // Refresh recents
     this.renderRecents();
+  }
+
+  /**
+   * Sync current theme to an iframe's document
+   */
+  syncThemeToIframe(iframe) {
+    try {
+      const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+      if (iframeDoc) {
+        iframeDoc.documentElement.setAttribute('data-theme', this.themeManager.getTheme());
+      }
+    } catch (e) {
+      // Cross-origin or sandbox restriction - ignore
+    }
   }
 
   /**

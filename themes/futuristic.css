@@ -1,0 +1,100 @@
+/* Futuristic Theme - Cyberpunk / Neon */
+
+[data-theme="futuristic"] {
+  /* Background layers */
+  --bg-outer: #050510;
+  --bg-outer-gradient: radial-gradient(ellipse at center, #0a0a2e 0%, #050510 70%);
+  --bg-grain-opacity: 0.04;
+
+  /* Window glass effect */
+  --window-fill: rgba(8, 8, 24, 1);
+  --window-border: rgba(0, 255, 255, 0.15);
+  --window-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6),
+                   0 0 0 1px rgba(0, 255, 255, 0.08);
+  --window-backdrop: none;
+
+  /* Surface colors */
+  --surface-primary: rgba(12, 12, 32, 1);
+  --surface-secondary: rgba(18, 18, 42, 1);
+  --surface-tertiary: rgba(10, 10, 28, 1);
+  --surface-hover: rgba(25, 25, 60, 1);
+  --surface-active: rgba(35, 35, 75, 1);
+
+  /* Card colors */
+  --card-fill: rgba(14, 14, 36, 1);
+  --card-fill-hover: rgba(20, 20, 48, 1);
+  --card-border: rgba(0, 255, 255, 0.1);
+  --card-border-hover: rgba(0, 255, 255, 0.25);
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+  /* Text colors */
+  --text-primary: rgba(220, 240, 255, 0.95);
+  --text-secondary: rgba(140, 200, 220, 0.7);
+  --text-tertiary: rgba(100, 160, 180, 0.5);
+  --text-placeholder: rgba(80, 140, 160, 0.4);
+  --text-disabled: rgba(60, 120, 140, 0.3);
+
+  /* Accent colors - Cyan / Electric */
+  --accent-primary: #00e5ff;
+  --accent-primary-hover: #40efff;
+  --accent-primary-active: #00b8d4;
+  --accent-secondary: #e040fb;
+  --accent-light: rgba(0, 229, 255, 0.15);
+  --accent-lighter: rgba(0, 229, 255, 0.06);
+
+  /* Focus & interaction */
+  --focus-ring: rgba(0, 229, 255, 0.6);
+  --focus-ring-offset: rgba(8, 8, 24, 1);
+
+  /* Border colors */
+  --border-primary: rgba(0, 229, 255, 0.15);
+  --border-secondary: rgba(0, 229, 255, 0.08);
+  --border-light: rgba(0, 229, 255, 0.04);
+
+  /* Semantic colors */
+  --color-success: #00e676;
+  --color-success-light: rgba(0, 230, 118, 0.15);
+  --color-warning: #ffab00;
+  --color-warning-light: rgba(255, 171, 0, 0.15);
+  --color-danger: #ff1744;
+  --color-danger-light: rgba(255, 23, 68, 0.15);
+  --color-info: #2979ff;
+  --color-info-light: rgba(41, 121, 255, 0.15);
+
+  /* Sidebar */
+  --sidebar-bg: rgba(8, 8, 22, 1);
+  --sidebar-border: rgba(0, 229, 255, 0.1);
+  --sidebar-item-hover: rgba(0, 229, 255, 0.08);
+  --sidebar-item-active: rgba(0, 229, 255, 0.2);
+  --sidebar-item-active-border: var(--accent-primary);
+
+  /* Input fields */
+  --input-bg: rgba(6, 6, 18, 1);
+  --input-bg-hover: rgba(10, 10, 26, 1);
+  --input-border: rgba(0, 229, 255, 0.15);
+  --input-border-hover: rgba(0, 229, 255, 0.25);
+  --input-border-focus: var(--accent-primary);
+
+  /* Scrollbar */
+  --scrollbar-track: rgba(0, 229, 255, 0.04);
+  --scrollbar-thumb: rgba(0, 229, 255, 0.15);
+  --scrollbar-thumb-hover: rgba(0, 229, 255, 0.3);
+
+  /* Recents section */
+  --recent-tile-bg: var(--card-fill);
+  --recent-tile-border: var(--card-border);
+  --recent-tile-hover-bg: var(--card-fill-hover);
+
+  /* Settings drawer */
+  --drawer-bg: rgba(10, 10, 28, 1);
+  --drawer-border: rgba(0, 229, 255, 0.1);
+  --drawer-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
+
+  /* Overlay */
+  --overlay-bg: rgba(0, 0, 0, 0.7);
+
+  /* Icon colors */
+  --icon-primary: rgba(0, 229, 255, 0.9);
+  --icon-secondary: rgba(0, 200, 230, 0.6);
+  --icon-tertiary: rgba(0, 180, 210, 0.4);
+}
