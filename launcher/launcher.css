@@ -252,6 +252,7 @@ body.app-open .topbar-mobile-btn {
 /* App Body */
 .app-body {
   flex: 1;
+  min-height: 0;
   display: flex;
   overflow: hidden;
   position: relative;
@@ -336,6 +337,7 @@ body.app-open .topbar-mobile-btn {
 /* Main Content */
 .main-content {
   flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -528,6 +530,34 @@ body.app-open .topbar-mobile-btn {
   box-shadow: 0 0 0 3px var(--focus-ring);
 }
 
+.toolbar-categories-btn {
+  height: 34px;
+  padding: 0 var(--space-3);
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-family: inherit;
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.toolbar-categories-btn:hover {
+  background: var(--input-bg-hover);
+  border-color: var(--input-border-hover);
+}
+
+.toolbar-categories-btn svg {
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
 
 /* App List */
 .app-grid {
@@ -601,34 +631,14 @@ body.app-open .topbar-mobile-btn {
   text-overflow: ellipsis;
 }
 
-/* Add App Card */
-.add-app-card {
-  border-style: dashed;
-  border-color: var(--border-primary);
-  background: transparent;
-}
-
-.add-app-card:hover {
-  background: var(--accent-lighter);
-  border-color: var(--accent-primary);
-}
-
-.add-icon {
-  width: 44px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--radius-md);
-  background: var(--surface-secondary);
+.app-theme-badge {
+  flex-shrink: 0;
+  font-size: var(--font-size-xs);
   color: var(--text-tertiary);
-  font-size: 24px;
-  font-weight: 300;
-}
-
-.add-app-card:hover .add-icon {
-  background: var(--accent-light);
-  color: var(--accent-primary);
+  padding: 2px var(--space-2);
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
 }
 
 /* Footer */
@@ -809,8 +819,9 @@ body.app-open .topbar-mobile-btn {
 }
 
 .theme-preview.futuristic {
-  background: linear-gradient(135deg, #0a0a2e 0%, #050510 100%);
-  border-color: rgba(0, 229, 255, 0.3);
+  background: linear-gradient(135deg, #0a0a2e 0%, #020108 100%);
+  border-color: rgba(0, 229, 255, 0.4);
+  box-shadow: inset 0 0 8px rgba(0, 229, 255, 0.15);
 }
 
 .theme-preview.amalfi {
@@ -843,6 +854,21 @@ body.app-open .topbar-mobile-btn {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
+}
+
+.app-delete-row {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  margin-top: var(--space-3);
+}
+
+.app-delete-select {
+  flex: 1;
+}
+
+.app-delete-btn {
+  flex-shrink: 0;
 }
 
 .action-btn {
@@ -1036,8 +1062,21 @@ body.app-open .topbar-mobile-btn {
   padding-bottom: calc(var(--space-4) + env(safe-area-inset-bottom, 0));
 }
 
-.mobile-search-results .app-card {
-  margin-bottom: var(--space-3);
+.mobile-search-results .search-results-list {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.mobile-search-results .search-results-list .app-card {
+  border-bottom: 1px solid var(--border-secondary);
+  border-radius: 0;
+}
+
+.mobile-search-results .search-results-list .app-card:last-child {
+  border-bottom: none;
 }
 
 .mobile-search-results .no-results {
@@ -1052,9 +1091,10 @@ body.app-open .topbar-mobile-btn {
   bottom: 0;
   left: 0;
   right: 0;
-  background: var(--surface-secondary);
+  background: var(--drawer-bg);
   border-top-left-radius: var(--radius-xl);
   border-top-right-radius: var(--radius-xl);
+  border-top: 1px solid var(--border-secondary);
   z-index: var(--z-modal);
   max-height: 70vh;
   display: flex;
@@ -1091,6 +1131,12 @@ body.app-open .topbar-mobile-btn {
   border-radius: var(--radius-full);
   color: var(--text-secondary);
   cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.mobile-sheet-close:hover {
+  background: var(--surface-active);
+  color: var(--text-primary);
 }
 
 .mobile-sheet-close svg {

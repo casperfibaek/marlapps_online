@@ -39,14 +39,18 @@ class PWAInstallManager {
     // Check if running in standalone mode (already installed)
     if (window.matchMedia('(display-mode: standalone)').matches) {
       this.isInstalled = true;
-      console.log('PWA: Running in standalone mode (installed)');
       return;
     }
 
     // Check for iOS standalone
     if (window.navigator.standalone === true) {
       this.isInstalled = true;
-      console.log('PWA: Running in iOS standalone mode (installed)');
+      return;
+    }
+
+    // Check if previously installed (persisted flag)
+    if (localStorage.getItem('pwa-installed') === 'true') {
+      this.isInstalled = true;
       return;
     }
 
@@ -54,10 +58,8 @@ class PWAInstallManager {
     const dismissed = localStorage.getItem('pwa-install-dismissed');
     if (dismissed) {
       const dismissedTime = parseInt(dismissed, 10);
-      // Show again after 7 days
       const sevenDays = 7 * 24 * 60 * 60 * 1000;
       if (Date.now() - dismissedTime < sevenDays) {
-        console.log('PWA: Install prompt dismissed recently');
         return;
       }
     }
@@ -89,10 +91,9 @@ class PWAInstallManager {
       this.hideBanner();
       this.deferredPrompt = null;
 
-      // Clear dismissed state
+      // Persist installed flag so banner never shows again
+      localStorage.setItem('pwa-installed', 'true');
       localStorage.removeItem('pwa-install-dismissed');
-
-      console.log('PWA: App was installed');
     });
 
     // Install button click

@@ -35,6 +35,8 @@ class MirrorApp {
     this.contrastSlider = document.getElementById('contrastSlider');
     this.contrastValue = document.getElementById('contrastValue');
     this.resetFiltersBtn = document.getElementById('resetFiltersBtn');
+    this.controlsToggle = document.getElementById('controlsToggle');
+    this.controlPanel = document.getElementById('controlPanel');
   }
 
   syncThemeWithParent() {
@@ -64,6 +66,11 @@ class MirrorApp {
     this.retryBtn.addEventListener('click', () => this.startCamera());
     this.captureBtn.addEventListener('click', () => this.capturePhoto());
     this.flipBtn.addEventListener('click', () => this.flipCamera());
+
+    // Toggle controls panel
+    this.controlsToggle.addEventListener('click', () => {
+      this.controlPanel.classList.toggle('hidden');
+    });
 
     // Filter buttons
     document.querySelectorAll('.filter-btn').forEach(btn => {

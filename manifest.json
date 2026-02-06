@@ -1,7 +1,8 @@
 {
-  "name": "MarlApps - Productivity Suite",
+  "name": "MarlApps",
   "short_name": "MarlApps",
-  "description": "A desktop-first productivity app launcher with glass UI design",
+  "version": "2.0.0",
+  "description": "A personal productivity suite that runs entirely in your browser",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0a0a0f",

@@ -56,11 +56,6 @@ class Launcher {
         const card = e.target.closest('.app-card[data-app-id]');
         if (card) {
           this.openApp(card.dataset.appId);
-          return;
-        }
-        const addCard = e.target.closest('.add-app-card');
-        if (addCard) {
-          alert('Add App feature coming soon!');
         }
       });
     }
@@ -121,8 +116,37 @@ class Launcher {
       });
     }
 
+    // Toolbar categories button - cycle through categories
+    const toolbarCategoriesBtn = document.getElementById('toolbarCategoriesBtn');
+    if (toolbarCategoriesBtn) {
+      toolbarCategoriesBtn.addEventListener('click', () => {
+        const categories = ['all', 'focus', 'planning', 'notes', 'personal', 'tools'];
+        const currentIndex = categories.indexOf(this.currentCategory);
+        const nextIndex = (currentIndex + 1) % categories.length;
+        this.setCategory(categories[nextIndex]);
+        // Update the label
+        const label = document.getElementById('toolbarCategoryLabel');
+        if (label) {
+          label.textContent = categories[nextIndex] === 'all'
+            ? 'All'
+            : categories[nextIndex].charAt(0).toUpperCase() + categories[nextIndex].slice(1);
+        }
+      });
+    }
+
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
+      // Ctrl+L to open search (mobile overlay or focus desktop search)
+      if ((e.metaKey || e.ctrlKey) && e.key === 'l') {
+        e.preventDefault();
+        const isMobile = window.innerWidth <= 768;
+        if (isMobile) {
+          this.openMobileSearch();
+        }
+        // Desktop search is handled by search.js
+        return;
+      }
+
       if (e.key === 'Escape') {
         // Close mobile search overlay if open
         const mobileSearchOverlay = document.getElementById('mobileSearchOverlay');
@@ -163,14 +187,6 @@ class Launcher {
         this.syncThemeToIframe(iframe);
       }
     });
-
-    // Add app button
-    const addAppBtn = document.getElementById('addAppBtn');
-    if (addAppBtn) {
-      addAppBtn.addEventListener('click', () => {
-        alert('Add App feature coming soon!');
-      });
-    }
 
     // Topbar settings button
     const topbarSettingsBtn = document.getElementById('topbarSettingsBtn');
@@ -330,7 +346,7 @@ class Launcher {
       return;
     }
 
-    results.innerHTML = apps.map(app => `
+    const cardsHtml = apps.map(app => `
       <div class="app-card" data-app-id="${app.id}" tabindex="0" role="listitem" aria-label="Open ${this.escapeHtml(app.name)}">
         <img class="app-icon" src="${this.appLoader.getAppIconUrl(app)}" alt="" loading="lazy">
         <div class="app-info">
@@ -339,6 +355,7 @@ class Launcher {
         </div>
       </div>
     `).join('');
+    results.innerHTML = `<div class="search-results-list">${cardsHtml}</div>`;
 
     // Bind click events to search results
     results.querySelectorAll('.app-card').forEach(card => {
@@ -435,6 +452,14 @@ class Launcher {
         : category.charAt(0).toUpperCase() + category.slice(1);
     }
 
+    // Update toolbar categories button label
+    const catLabel = document.getElementById('toolbarCategoryLabel');
+    if (catLabel) {
+      catLabel.textContent = category === 'all'
+        ? 'All'
+        : category.charAt(0).toUpperCase() + category.slice(1);
+    }
+
     // Clear search and re-render
     if (this.searchManager) {
       this.searchManager.clear();
@@ -517,6 +542,8 @@ class Launcher {
     apps = this.sortApps(apps);
 
     // Render cards
+    const currentTheme = this.themeManager.getTheme();
+    const themeLabel = currentTheme.charAt(0).toUpperCase() + currentTheme.slice(1);
     const cardsHtml = apps.map(app => `
       <div class="app-card" data-app-id="${app.id}" tabindex="0" role="listitem" aria-label="Open ${this.escapeHtml(app.name)}">
         <img class="app-icon" src="${this.appLoader.getAppIconUrl(app)}" alt="" loading="lazy">
@@ -524,21 +551,11 @@ class Launcher {
           <span class="app-name">${this.escapeHtml(app.name)}</span>
           <span class="app-description">${this.escapeHtml(app.description)}</span>
         </div>
+        <span class="app-theme-badge">${themeLabel}</span>
       </div>
     `).join('');
 
-    // Add the "Add App" card at the end
-    const addCardHtml = `
-      <div class="app-card add-app-card" id="addAppCard" tabindex="0" role="listitem" aria-label="Add new app">
-        <div class="add-icon" aria-hidden="true">+</div>
-        <div class="app-info">
-          <span class="app-name">Add App</span>
-          <span class="app-description">Coming soon</span>
-        </div>
-      </div>
-    `;
-
-    container.innerHTML = cardsHtml + addCardHtml;
+    container.innerHTML = cardsHtml;
   }
 
   /**
@@ -627,13 +644,25 @@ class Launcher {
    * Sync current theme to an iframe's document
    */
   syncThemeToIframe(iframe) {
+    const theme = this.themeManager.getTheme();
+
+    // Method 1: Direct DOM access (same-origin iframes)
     try {
       const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
       if (iframeDoc) {
-        iframeDoc.documentElement.setAttribute('data-theme', this.themeManager.getTheme());
+        iframeDoc.documentElement.setAttribute('data-theme', theme);
       }
     } catch (e) {
-      // Cross-origin or sandbox restriction - ignore
+      // Cross-origin or sandbox restriction - fall through to postMessage
+    }
+
+    // Method 2: postMessage (apps listen for this)
+    try {
+      if (iframe.contentWindow) {
+        iframe.contentWindow.postMessage({ type: 'theme-change', theme }, '*');
+      }
+    } catch (e) {
+      // Ignore
     }
   }
 

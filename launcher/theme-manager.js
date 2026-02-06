@@ -61,7 +61,7 @@ class ThemeManager {
     const themeColors = {
       dark: '#0a0a0f',
       light: '#e8e8ed',
-      futuristic: '#050510',
+      futuristic: '#020108',
       amalfi: '#f5ebe0'
     };
     const metaThemeColor = document.querySelector('meta[name="theme-color"]');

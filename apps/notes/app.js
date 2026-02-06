@@ -70,6 +70,21 @@ class NotesApp {
         this.createNewNote();
       }
     });
+
+    // Force-save before iframe is destroyed
+    window.addEventListener('beforeunload', () => {
+      if (this.autoSaveTimeout) {
+        clearTimeout(this.autoSaveTimeout);
+        this.saveCurrentNote();
+      }
+    });
+
+    window.addEventListener('pagehide', () => {
+      if (this.autoSaveTimeout) {
+        clearTimeout(this.autoSaveTimeout);
+        this.saveCurrentNote();
+      }
+    });
   }
 
   loadNotes() {

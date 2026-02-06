@@ -109,18 +109,18 @@
 
 /* Futuristic theme override (explicit) */
 [data-theme="futuristic"] {
-  --app-bg-primary: #0c0c20;
-  --app-bg-secondary: #080818;
-  --app-bg-tertiary: #12122a;
-  --app-text-primary: rgba(220, 240, 255, 0.95);
-  --app-text-secondary: rgba(140, 200, 220, 0.7);
-  --app-text-tertiary: rgba(100, 160, 180, 0.5);
-  --app-border-color: rgba(0, 229, 255, 0.12);
-  --app-border-light: rgba(0, 229, 255, 0.05);
-  --app-bg-hover: rgba(0, 229, 255, 0.06);
-  --app-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-  --app-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35);
-  --app-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --app-bg-primary: #080519;
+  --app-bg-secondary: #0e0a23;
+  --app-bg-tertiary: #100c28;
+  --app-text-primary: rgba(200, 240, 255, 0.95);
+  --app-text-secondary: rgba(100, 200, 230, 0.7);
+  --app-text-tertiary: rgba(70, 160, 190, 0.5);
+  --app-border-color: rgba(0, 229, 255, 0.15);
+  --app-border-light: rgba(0, 229, 255, 0.06);
+  --app-bg-hover: rgba(0, 229, 255, 0.08);
+  --app-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --app-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.45), 0 0 10px rgba(0, 229, 255, 0.03);
+  --app-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(0, 229, 255, 0.04);
   --app-accent: #00e5ff;
   --app-accent-hover: #00b8d4;
   --app-success: #00e676;

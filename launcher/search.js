@@ -31,8 +31,8 @@ class SearchManager {
    */
   bindKeyboard() {
     document.addEventListener('keydown', (e) => {
-      // Cmd/Ctrl + K to focus search
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      // Cmd/Ctrl + K or Ctrl + L to focus search
+      if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'l')) {
         e.preventDefault();
         this.focus();
         return;

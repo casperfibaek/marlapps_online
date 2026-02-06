@@ -22,6 +22,16 @@ class SettingsManager {
       'marlapps-recents',
       'marlapps-theme'
     ];
+
+    // Per-app storage key mapping
+    this.appStorageMap = {
+      'todo-list': { name: 'Todo List', keys: ['todoList'] },
+      'kanban-board': { name: 'Kanban Board', keys: ['kanbanBoard'] },
+      'pomodoro-timer': { name: 'Pomodoro Timer', keys: ['pomodoroSettings', 'pomodoroState'] },
+      'notes': { name: 'Notes', keys: ['marlapps-notes'] },
+      'habits': { name: 'Habits', keys: ['marlapps-habits'] },
+      'mirror': { name: 'Mirror Photos', keys: ['marlapps-mirror-photos'] }
+    };
   }
 
   /**
@@ -108,6 +118,18 @@ class SettingsManager {
     const resetDataBtn = document.getElementById('resetDataBtn');
     if (resetDataBtn) {
       resetDataBtn.addEventListener('click', () => this.resetData());
+    }
+
+    // Per-app data deletion
+    const deleteAppSelect = document.getElementById('deleteAppSelect');
+    const deleteAppBtn = document.getElementById('deleteAppBtn');
+    if (deleteAppSelect && deleteAppBtn) {
+      deleteAppBtn.addEventListener('click', () => {
+        const appId = deleteAppSelect.value;
+        if (appId) {
+          this.deleteAppData(appId);
+        }
+      });
     }
   }
 
@@ -268,6 +290,24 @@ class SettingsManager {
       console.error('Import failed:', error);
       alert(`Failed to import data: ${error.message}`);
     }
+  }
+
+  /**
+   * Delete data for a specific app
+   */
+  deleteAppData(appId) {
+    const appInfo = this.appStorageMap[appId];
+    if (!appInfo) return;
+
+    if (!confirm(`Delete all data for ${appInfo.name}? This cannot be undone.`)) return;
+
+    appInfo.keys.forEach(key => localStorage.removeItem(key));
+
+    // Reset the dropdown
+    const select = document.getElementById('deleteAppSelect');
+    if (select) select.value = '';
+
+    this.showNotification(`${appInfo.name} data deleted.`);
   }
 
   /**

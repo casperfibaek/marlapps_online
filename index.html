@@ -8,7 +8,7 @@
   <title>MarlApps</title>
 
   <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="./favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="./icons/icon.svg">
   <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192x192.png">
 
   <!-- PWA -->
@@ -62,7 +62,7 @@
             spellcheck="false"
             aria-label="Search apps"
           >
-          <kbd class="search-hint" aria-hidden="true">⌘K</kbd>
+          <kbd class="search-hint" aria-hidden="true">Ctrl+K / L</kbd>
         </div>
       </div>
 
@@ -166,6 +166,15 @@
         <div class="grid-toolbar">
           <h2 class="toolbar-title" id="gridTitle" aria-live="polite">All apps</h2>
           <div class="toolbar-controls">
+            <button class="toolbar-categories-btn" id="toolbarCategoriesBtn" aria-label="Filter by category">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" width="16" height="16">
+                <rect x="3" y="3" width="7" height="7"/>
+                <rect x="14" y="3" width="7" height="7"/>
+                <rect x="14" y="14" width="7" height="7"/>
+                <rect x="3" y="14" width="7" height="7"/>
+              </svg>
+              <span id="toolbarCategoryLabel">All</span>
+            </button>
             <label for="sortSelect" class="sr-only">Sort apps by</label>
             <select class="sort-select" id="sortSelect">
               <option value="recent">Recently used</option>
@@ -260,6 +269,26 @@
           </button>
         </div>
         <input type="file" id="importFileInput" accept=".json" hidden>
+
+        <h3 style="margin-top: var(--space-6)">Delete app data</h3>
+        <div class="app-delete-row">
+          <select class="sort-select app-delete-select" id="deleteAppSelect" aria-label="Select app to delete data">
+            <option value="">Select an app...</option>
+            <option value="todo-list">Todo List</option>
+            <option value="kanban-board">Kanban Board</option>
+            <option value="pomodoro-timer">Pomodoro Timer</option>
+            <option value="notes">Notes</option>
+            <option value="habits">Habits</option>
+            <option value="mirror">Mirror Photos</option>
+          </select>
+          <button class="action-btn danger app-delete-btn" id="deleteAppBtn" aria-label="Delete selected app data">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" width="18" height="18">
+              <polyline points="3,6 5,6 21,6"/>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+            </svg>
+            <span>Delete</span>
+          </button>
+        </div>
       </section>
 
       <!-- About Section -->
