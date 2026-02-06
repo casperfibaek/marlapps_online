@@ -1,7 +1,3 @@
-/**
- * App Loader - Handles app registry and manifest loading
- */
-
 class AppLoader {
   constructor() {
     this.registryPath = './registry/apps.json';
@@ -12,9 +8,6 @@ class AppLoader {
     this.recents = this.loadRecents();
   }
 
-  /**
-   * Initialize app loader - load registry and all app manifests
-   */
   async init() {
     try {
       this.registry = await this.loadRegistry();
@@ -26,9 +19,6 @@ class AppLoader {
     }
   }
 
-  /**
-   * Load the main app registry
-   */
   async loadRegistry() {
     const response = await fetch(this.registryPath);
     if (!response.ok) {
@@ -37,9 +27,6 @@ class AppLoader {
     return response.json();
   }
 
-  /**
-   * Load manifests for all registered apps
-   */
   async loadAppManifests(registryApps) {
     const apps = [];
 
@@ -67,20 +54,13 @@ class AppLoader {
       }
     }
 
-    // Sort by order
     return apps.sort((a, b) => a.order - b.order);
   }
 
-  /**
-   * Get app by ID
-   */
   getAppById(id) {
     return this.apps.find(app => app.id === id);
   }
 
-  /**
-   * Get apps filtered by category
-   */
   getAppsByCategory(category) {
     if (category === 'all') return this.apps;
 
@@ -91,9 +71,7 @@ class AppLoader {
     );
   }
 
-  /**
-   * Calculate Damerau-Levenshtein distance between two strings
-   */
+  // Damerau-Levenshtein distance for fuzzy search
   damerauLevenshtein(a, b) {
     const lenA = a.length;
     const lenB = b.length;
@@ -101,7 +79,6 @@ class AppLoader {
     if (lenA === 0) return lenB;
     if (lenB === 0) return lenA;
 
-    // Create distance matrix
     const d = Array(lenA + 1).fill(null).map(() => Array(lenB + 1).fill(0));
 
     for (let i = 0; i <= lenA; i++) d[i][0] = i;
@@ -112,12 +89,11 @@ class AppLoader {
         const cost = a[i - 1] === b[j - 1] ? 0 : 1;
 
         d[i][j] = Math.min(
-          d[i - 1][j] + 1,       // deletion
-          d[i][j - 1] + 1,       // insertion
-          d[i - 1][j - 1] + cost // substitution
+          d[i - 1][j] + 1,
+          d[i][j - 1] + 1,
+          d[i - 1][j - 1] + cost
         );
 
-        // Transposition
         if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) {
           d[i][j] = Math.min(d[i][j], d[i - 2][j - 2] + cost);
         }
@@ -127,28 +103,22 @@ class AppLoader {
     return d[lenA][lenB];
   }
 
-  /**
-   * Calculate fuzzy match score (0 = perfect match, higher = worse)
-   */
+  // Returns 0 for perfect/substring match, higher = worse match
   getFuzzyScore(query, text) {
     const q = query.toLowerCase();
     const t = text.toLowerCase();
 
-    // Exact match or contains
     if (t.includes(q)) return 0;
 
-    // Check each word
     const words = t.split(/\s+/);
     let bestScore = Infinity;
 
     for (const word of words) {
       const distance = this.damerauLevenshtein(q, word);
-      // Normalize by max length to get relative score
       const normalizedScore = distance / Math.max(q.length, word.length);
       bestScore = Math.min(bestScore, normalizedScore);
     }
 
-    // Also check against full text for partial matches
     const fullDistance = this.damerauLevenshtein(q, t.substring(0, q.length + 2));
     const fullNormalized = fullDistance / Math.max(q.length, t.length);
     bestScore = Math.min(bestScore, fullNormalized);
@@ -156,16 +126,12 @@ class AppLoader {
     return bestScore;
   }
 
-  /**
-   * Search apps by query using fuzzy matching
-   */
   searchApps(query) {
     if (!query || !query.trim()) return this.apps;
 
     const normalizedQuery = query.toLowerCase().trim();
-    const threshold = 0.25; // Allow up to 25% difference for tighter matching
+    const threshold = 0.25;
 
-    // Score each app
     const scored = this.apps.map(app => {
       const nameScore = this.getFuzzyScore(normalizedQuery, app.name);
       const descScore = this.getFuzzyScore(normalizedQuery, app.description);
@@ -178,16 +144,12 @@ class AppLoader {
       return { app, score: bestScore };
     });
 
-    // Filter by threshold and sort by score
     return scored
       .filter(item => item.score <= threshold)
       .sort((a, b) => a.score - b.score)
       .map(item => item.app);
   }
 
-  /**
-   * Get recently opened apps
-   */
   getRecentApps(limit = 5) {
     return this.recents
       .sort((a, b) => b.timestamp - a.timestamp)
@@ -195,30 +157,20 @@ class AppLoader {
       .map(r => {
         const app = this.getAppById(r.id);
         if (!app) return null;
-        return {
-          ...app,
-          lastOpened: r.timestamp
-        };
+        return { ...app, lastOpened: r.timestamp };
       })
       .filter(app => app !== null);
   }
 
-  /**
-   * Record app open event
-   */
   recordAppOpen(appId) {
     const existingIndex = this.recents.findIndex(r => r.id === appId);
 
     if (existingIndex >= 0) {
       this.recents[existingIndex].timestamp = Date.now();
     } else {
-      this.recents.push({
-        id: appId,
-        timestamp: Date.now()
-      });
+      this.recents.push({ id: appId, timestamp: Date.now() });
     }
 
-    // Keep only last 20 entries
     if (this.recents.length > 20) {
       this.recents.sort((a, b) => b.timestamp - a.timestamp);
       this.recents = this.recents.slice(0, 20);
@@ -227,9 +179,6 @@ class AppLoader {
     this.saveRecents();
   }
 
-  /**
-   * Load recents from storage
-   */
   loadRecents() {
     try {
       const saved = localStorage.getItem(this.recentsKey);
@@ -240,9 +189,6 @@ class AppLoader {
     }
   }
 
-  /**
-   * Save recents to storage
-   */
   saveRecents() {
     try {
       localStorage.setItem(this.recentsKey, JSON.stringify(this.recents));
@@ -251,33 +197,13 @@ class AppLoader {
     }
   }
 
-  /**
-   * Get full entry URL for an app
-   */
   getAppEntryUrl(app) {
     return `${this.appsBasePath}/${app.folder}/${app.entry}`;
   }
 
-  /**
-   * Get icon URL for an app
-   */
   getAppIconUrl(app) {
     return `${this.appsBasePath}/${app.folder}/${app.icon}`;
   }
-
-  /**
-   * Get all unique categories from loaded apps
-   */
-  getAllCategories() {
-    const categories = new Set();
-    this.apps.forEach(app => {
-      if (app.categories) {
-        app.categories.forEach(c => categories.add(c));
-      }
-    });
-    return Array.from(categories).sort();
-  }
 }
 
-// Export for use in other modules
 window.AppLoader = AppLoader;

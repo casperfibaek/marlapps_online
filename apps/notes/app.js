@@ -23,6 +23,8 @@ class NotesApp {
     this.noteDate = document.getElementById('noteDate');
     this.deleteNoteBtn = document.getElementById('deleteNoteBtn');
     this.searchInput = document.getElementById('searchInput');
+    this.notesLayout = document.querySelector('.notes-layout');
+    this.mobileBackBtn = document.getElementById('mobileBackBtn');
   }
 
   syncThemeWithParent() {
@@ -50,6 +52,11 @@ class NotesApp {
   initEventListeners() {
     this.newNoteBtn.addEventListener('click', () => this.createNewNote());
     this.deleteNoteBtn.addEventListener('click', () => this.deleteCurrentNote());
+
+    // Mobile back button
+    if (this.mobileBackBtn) {
+      this.mobileBackBtn.addEventListener('click', () => this.closeMobileEditor());
+    }
 
     // Debounced search for better performance
     this.searchInput.addEventListener('input', (e) => {
@@ -111,6 +118,10 @@ class NotesApp {
     this.openNote(note.id);
   }
 
+  isMobile() {
+    return window.innerWidth <= 768;
+  }
+
   openNote(noteId) {
     this.currentNoteId = noteId;
     const note = this.notes.find(n => n.id === noteId);
@@ -129,8 +140,22 @@ class NotesApp {
       item.classList.toggle('active', item.dataset.noteId === noteId);
     });
 
-    // Focus on content
+    // On mobile, switch to editor view
+    if (this.isMobile() && this.notesLayout) {
+      this.notesLayout.classList.add('mobile-editing');
+    }
+
     this.noteContentInput.focus();
+  }
+
+  closeMobileEditor() {
+    if (this.autoSaveTimeout) {
+      clearTimeout(this.autoSaveTimeout);
+      this.saveCurrentNote();
+    }
+    if (this.notesLayout) {
+      this.notesLayout.classList.remove('mobile-editing');
+    }
   }
 
   scheduleAutoSave() {
@@ -172,6 +197,9 @@ class NotesApp {
 
     this.noteEditor.style.display = 'none';
     this.emptyState.style.display = 'flex';
+    if (this.notesLayout) {
+      this.notesLayout.classList.remove('mobile-editing');
+    }
     this.renderNotesList();
   }
 

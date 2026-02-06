@@ -16,6 +16,9 @@
   --app-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
   --app-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.25);
   --app-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.3);
+  --app-scrollbar-track: rgba(255, 255, 255, 0.05);
+  --app-scrollbar-thumb: rgba(255, 255, 255, 0.15);
+  --app-scrollbar-thumb-hover: rgba(255, 255, 255, 0.25);
 
   /* Semantic colors */
   --app-success: #2ECC71;
@@ -72,6 +75,9 @@
     --app-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
     --app-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
     --app-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+    --app-scrollbar-track: rgba(0, 0, 0, 0.05);
+    --app-scrollbar-thumb: rgba(0, 0, 0, 0.15);
+    --app-scrollbar-thumb-hover: rgba(0, 0, 0, 0.25);
   }
 }
 
@@ -89,6 +95,9 @@
   --app-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
   --app-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.25);
   --app-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.3);
+  --app-scrollbar-track: rgba(255, 255, 255, 0.05);
+  --app-scrollbar-thumb: rgba(255, 255, 255, 0.15);
+  --app-scrollbar-thumb-hover: rgba(255, 255, 255, 0.25);
 }
 
 /* Light theme override (explicit) */
@@ -105,6 +114,9 @@
   --app-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
   --app-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
   --app-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --app-scrollbar-track: rgba(0, 0, 0, 0.05);
+  --app-scrollbar-thumb: rgba(0, 0, 0, 0.15);
+  --app-scrollbar-thumb-hover: rgba(0, 0, 0, 0.25);
 }
 
 /* Futuristic theme override (explicit) */
@@ -127,6 +139,9 @@
   --app-success-hover: #00c853;
   --app-danger: #ff1744;
   --app-danger-hover: #d50000;
+  --app-scrollbar-track: rgba(0, 229, 255, 0.05);
+  --app-scrollbar-thumb: rgba(0, 229, 255, 0.15);
+  --app-scrollbar-thumb-hover: rgba(0, 229, 255, 0.25);
 }
 
 /* Amalfi theme override (explicit) */
@@ -149,6 +164,9 @@
   --app-success-hover: #267349;
   --app-danger: #c0392b;
   --app-danger-hover: #a02f24;
+  --app-scrollbar-track: rgba(180, 140, 90, 0.05);
+  --app-scrollbar-thumb: rgba(180, 140, 90, 0.15);
+  --app-scrollbar-thumb-hover: rgba(180, 140, 90, 0.25);
 }
 
 /* ===== Common Base Styles ===== */
@@ -332,6 +350,32 @@ select:focus {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* ===== Scrollbar Theming ===== */
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--app-scrollbar-thumb, rgba(128, 128, 128, 0.3)) var(--app-scrollbar-track, transparent);
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--app-scrollbar-track, transparent);
+  border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--app-scrollbar-thumb, rgba(128, 128, 128, 0.3));
+  border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--app-scrollbar-thumb-hover, rgba(128, 128, 128, 0.5));
 }
 
 /* ===== Momentum Scrolling ===== */

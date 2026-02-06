@@ -86,12 +86,9 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('MarlApps: Caching app shell');
         return cache.addAll(urlsToCache);
       })
-      .catch((error) => {
-        console.log('MarlApps: Cache installation failed:', error);
-      })
+      .catch(() => {})
   );
   // Force the waiting service worker to become the active service worker
   self.skipWaiting();
@@ -104,7 +101,6 @@ self.addEventListener('activate', (event) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
           if (cacheName !== CACHE_NAME) {
-            console.log('MarlApps: Deleting old cache:', cacheName);
             return caches.delete(cacheName);
           }
         })
@@ -143,9 +139,7 @@ self.addEventListener('fetch', (event) => {
             });
 
           return response;
-        }).catch((error) => {
-          console.log('MarlApps: Fetch failed, returning cached index:', error);
-          // Return the main app for navigation requests
+        }).catch(() => {
           return caches.match('./index.html');
         });
       })

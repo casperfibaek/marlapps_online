@@ -1,7 +1,3 @@
-/**
- * Theme Manager - Handles theme switching and persistence
- */
-
 class ThemeManager {
   constructor() {
     this.storageKey = 'marlapps-theme';
@@ -10,9 +6,6 @@ class ThemeManager {
     this.currentTheme = null;
   }
 
-  /**
-   * Initialize theme manager
-   */
   init() {
     const saved = localStorage.getItem(this.storageKey);
     const osPreference = this.getOSPreference();
@@ -22,9 +15,6 @@ class ThemeManager {
     return this;
   }
 
-  /**
-   * Get OS color scheme preference
-   */
   getOSPreference() {
     if (window.matchMedia('(prefers-color-scheme: light)').matches) {
       return 'light';
@@ -32,22 +22,15 @@ class ThemeManager {
     return 'dark';
   }
 
-  /**
-   * Watch for OS preference changes
-   */
   watchOSPreference() {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     mediaQuery.addEventListener('change', (e) => {
-      // Only apply if user hasn't explicitly set a preference
       if (!localStorage.getItem(this.storageKey)) {
         this.apply(e.matches ? 'dark' : 'light');
       }
     });
   }
 
-  /**
-   * Apply a theme
-   */
   apply(theme) {
     if (!this.supportedThemes.includes(theme)) {
       theme = this.defaultTheme;
@@ -57,7 +40,6 @@ class ThemeManager {
     localStorage.setItem(this.storageKey, theme);
     this.currentTheme = theme;
 
-    // Update meta theme-color for PWA
     const themeColors = {
       dark: '#0a0a0f',
       light: '#e8e8ed',
@@ -73,18 +55,6 @@ class ThemeManager {
     return this;
   }
 
-  /**
-   * Toggle between themes
-   */
-  toggle() {
-    const next = this.currentTheme === 'dark' ? 'light' : 'dark';
-    this.apply(next);
-    return this;
-  }
-
-  /**
-   * Reset to default/OS preference
-   */
   reset() {
     localStorage.removeItem(this.storageKey);
     const theme = this.getOSPreference() || this.defaultTheme;
@@ -92,23 +62,10 @@ class ThemeManager {
     return this;
   }
 
-  /**
-   * Get current theme
-   */
   getTheme() {
     return this.currentTheme;
   }
 
-  /**
-   * Check if dark theme is active
-   */
-  isDark() {
-    return this.currentTheme === 'dark';
-  }
-
-  /**
-   * Dispatch theme change event
-   */
   dispatchChange() {
     window.dispatchEvent(new CustomEvent('themechange', {
       detail: { theme: this.currentTheme }
@@ -116,5 +73,4 @@ class ThemeManager {
   }
 }
 
-// Export for use in other modules
 window.ThemeManager = ThemeManager;

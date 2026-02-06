@@ -30,9 +30,6 @@
   <!-- Skip to content -->
   <a href="#mainContent" class="skip-link">Skip to content</a>
 
-  <!-- Background Layer -->
-  <div class="bg-layer" aria-hidden="true"></div>
-
   <!-- Main App Window -->
   <div class="app-window">
     <!-- Top Bar -->
@@ -71,14 +68,6 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <circle cx="11" cy="11" r="8"/>
             <path d="M21 21l-4.35-4.35"/>
-          </svg>
-        </button>
-        <button class="icon-btn topbar-mobile-btn" title="Categories" id="topbarCategoriesBtn" aria-label="Open categories">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <rect x="3" y="3" width="7" height="7"/>
-            <rect x="14" y="3" width="7" height="7"/>
-            <rect x="14" y="14" width="7" height="7"/>
-            <rect x="3" y="14" width="7" height="7"/>
           </svg>
         </button>
         <button class="icon-btn" title="Settings" id="topbarSettingsBtn" aria-label="Open settings" aria-expanded="false">
@@ -173,8 +162,17 @@
                 <rect x="14" y="14" width="7" height="7"/>
                 <rect x="3" y="14" width="7" height="7"/>
               </svg>
-              <span id="toolbarCategoryLabel">All</span>
+              <span id="toolbarCategoryLabel">Categories</span>
             </button>
+            <!-- Category Dropdown -->
+            <div class="category-dropdown hidden" id="categoryDropdown" role="menu" aria-label="Category filter">
+              <button class="category-dropdown-item active" data-category="all" role="menuitem">All Apps</button>
+              <button class="category-dropdown-item" data-category="focus" role="menuitem">Focus</button>
+              <button class="category-dropdown-item" data-category="planning" role="menuitem">Planning</button>
+              <button class="category-dropdown-item" data-category="notes" role="menuitem">Notes</button>
+              <button class="category-dropdown-item" data-category="personal" role="menuitem">Personal</button>
+              <button class="category-dropdown-item" data-category="tools" role="menuitem">Tools</button>
+            </div>
             <label for="sortSelect" class="sr-only">Sort apps by</label>
             <select class="sort-select" id="sortSelect">
               <option value="recent">Recently used</option>

@@ -1,7 +1,3 @@
-/**
- * Settings Manager - Handles settings drawer and data management
- */
-
 class SettingsManager {
   constructor(themeManager, appLoader) {
     this.themeManager = themeManager;
@@ -10,7 +6,6 @@ class SettingsManager {
     this.overlay = null;
     this.isOpen = false;
 
-    // Storage keys for all app data
     this.storageKeys = [
       'todoList',
       'kanbanBoard',
@@ -23,7 +18,6 @@ class SettingsManager {
       'marlapps-theme'
     ];
 
-    // Per-app storage key mapping
     this.appStorageMap = {
       'todo-list': { name: 'Todo List', keys: ['todoList'] },
       'kanban-board': { name: 'Kanban Board', keys: ['kanbanBoard'] },
@@ -34,9 +28,6 @@ class SettingsManager {
     };
   }
 
-  /**
-   * Initialize settings manager
-   */
   init() {
     this.drawer = document.getElementById('settingsDrawer');
     this.overlay = document.getElementById('drawerOverlay');
@@ -51,26 +42,14 @@ class SettingsManager {
     return this;
   }
 
-  /**
-   * Bind all event listeners
-   */
   bindEvents() {
-    // Open drawer
-    const settingsBtn = document.getElementById('settingsBtn');
-    if (settingsBtn) {
-      settingsBtn.addEventListener('click', () => this.open());
-    }
-
-    // Close drawer
     const closeBtn = document.getElementById('closeSettingsBtn');
     if (closeBtn) {
       closeBtn.addEventListener('click', () => this.close());
     }
 
-    // Overlay click to close
     this.overlay.addEventListener('click', () => this.close());
 
-    // Escape key to close
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && this.isOpen) {
         this.close();
@@ -78,7 +57,6 @@ class SettingsManager {
       }
     });
 
-    // Theme selection
     document.querySelectorAll('.theme-option').forEach(btn => {
       btn.addEventListener('click', () => {
         this.themeManager.apply(btn.dataset.theme);
@@ -86,7 +64,6 @@ class SettingsManager {
       });
     });
 
-    // Reset theme
     const resetThemeBtn = document.getElementById('resetThemeBtn');
     if (resetThemeBtn) {
       resetThemeBtn.addEventListener('click', () => {
@@ -95,13 +72,11 @@ class SettingsManager {
       });
     }
 
-    // Export data
     const exportBtn = document.getElementById('exportBtn');
     if (exportBtn) {
       exportBtn.addEventListener('click', () => this.exportData());
     }
 
-    // Import data
     const importBtn = document.getElementById('importBtn');
     const importInput = document.getElementById('importFileInput');
     if (importBtn && importInput) {
@@ -109,18 +84,16 @@ class SettingsManager {
       importInput.addEventListener('change', (e) => {
         if (e.target.files[0]) {
           this.importData(e.target.files[0]);
-          e.target.value = ''; // Reset input
+          e.target.value = '';
         }
       });
     }
 
-    // Reset data
     const resetDataBtn = document.getElementById('resetDataBtn');
     if (resetDataBtn) {
       resetDataBtn.addEventListener('click', () => this.resetData());
     }
 
-    // Per-app data deletion
     const deleteAppSelect = document.getElementById('deleteAppSelect');
     const deleteAppBtn = document.getElementById('deleteAppBtn');
     if (deleteAppSelect && deleteAppBtn) {
@@ -133,57 +106,33 @@ class SettingsManager {
     }
   }
 
-  /**
-   * Open settings drawer
-   */
   open() {
     this.drawer.classList.add('open');
     this.overlay.classList.add('visible');
     this.drawer.setAttribute('aria-hidden', 'false');
     this.isOpen = true;
 
-    // Update trigger button state
     const trigger = document.getElementById('topbarSettingsBtn');
     if (trigger) trigger.setAttribute('aria-expanded', 'true');
 
-    // Focus trap - focus first interactive element
     const firstFocusable = this.drawer.querySelector('button, input');
     if (firstFocusable) {
       setTimeout(() => firstFocusable.focus(), 100);
     }
   }
 
-  /**
-   * Close settings drawer
-   */
   close() {
     this.drawer.classList.remove('open');
     this.overlay.classList.remove('visible');
     this.drawer.setAttribute('aria-hidden', 'true');
     this.isOpen = false;
 
-    // Update trigger button state
     const trigger = document.getElementById('topbarSettingsBtn');
     if (trigger) trigger.setAttribute('aria-expanded', 'false');
 
-    // Dispatch event for mobile nav to reset state
     window.dispatchEvent(new CustomEvent('settingsClosed'));
   }
 
-  /**
-   * Toggle drawer
-   */
-  toggle() {
-    if (this.isOpen) {
-      this.close();
-    } else {
-      this.open();
-    }
-  }
-
-  /**
-   * Update theme selector UI
-   */
   updateThemeSelector() {
     const currentTheme = this.themeManager.getTheme();
     document.querySelectorAll('.theme-option').forEach(btn => {
@@ -191,9 +140,6 @@ class SettingsManager {
     });
   }
 
-  /**
-   * Export all data to JSON file
-   */
   exportData() {
     const data = {
       version: '2.0.0',
@@ -203,7 +149,6 @@ class SettingsManager {
       appData: {}
     };
 
-    // Collect all app-specific data
     this.storageKeys.forEach(key => {
       if (key === 'marlapps-theme' || key === 'marlapps-recents') return;
 
@@ -217,7 +162,6 @@ class SettingsManager {
       }
     });
 
-    // Create and download file
     const blob = new Blob([JSON.stringify(data, null, 2)], {
       type: 'application/json'
     });
@@ -233,20 +177,15 @@ class SettingsManager {
     this.showNotification('Data exported successfully');
   }
 
-  /**
-   * Import data from JSON file
-   */
   async importData(file) {
     try {
       const text = await file.text();
       const data = JSON.parse(text);
 
-      // Validate structure
       if (!data.version || !data.exportedAt) {
         throw new Error('Invalid backup file format');
       }
 
-      // Calculate what will change
       const changes = [];
       if (data.theme) changes.push(`Theme: ${data.theme}`);
       if (data.recents?.length) changes.push(`Recent apps: ${data.recents.length}`);
@@ -255,7 +194,6 @@ class SettingsManager {
         if (appDataCount > 0) changes.push(`App data entries: ${appDataCount}`);
       }
 
-      // Show confirmation with preview
       const message = [
         `Import data from ${new Date(data.exportedAt).toLocaleDateString()}?`,
         '',
@@ -267,7 +205,6 @@ class SettingsManager {
 
       if (!confirm(message)) return;
 
-      // Apply imported data
       if (data.theme) {
         this.themeManager.apply(data.theme);
       }
@@ -292,9 +229,6 @@ class SettingsManager {
     }
   }
 
-  /**
-   * Delete data for a specific app
-   */
   deleteAppData(appId) {
     const appInfo = this.appStorageMap[appId];
     if (!appInfo) return;
@@ -303,16 +237,12 @@ class SettingsManager {
 
     appInfo.keys.forEach(key => localStorage.removeItem(key));
 
-    // Reset the dropdown
     const select = document.getElementById('deleteAppSelect');
     if (select) select.value = '';
 
     this.showNotification(`${appInfo.name} data deleted.`);
   }
 
-  /**
-   * Reset all local data
-   */
   resetData() {
     const message = [
       'Are you sure you want to reset all local data?',
@@ -326,14 +256,10 @@ class SettingsManager {
     ].join('\n');
 
     if (!confirm(message)) return;
-
-    // Double confirmation
     if (!confirm('This is your last chance. Delete ALL data?')) return;
 
-    // Clear all storage
     this.storageKeys.forEach(key => localStorage.removeItem(key));
 
-    // Also clear any other marlapps keys
     Object.keys(localStorage).forEach(key => {
       if (key.startsWith('marlapps-')) {
         localStorage.removeItem(key);
@@ -344,14 +270,19 @@ class SettingsManager {
     setTimeout(() => location.reload(), 1500);
   }
 
-  /**
-   * Show temporary notification
-   */
   showNotification(message) {
-    // Simple alert for now - could be enhanced with toast UI
-    console.log(message);
+    const toast = document.createElement('div');
+    toast.className = 'toast-notification';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+
+    requestAnimationFrame(() => toast.classList.add('visible'));
+
+    setTimeout(() => {
+      toast.classList.remove('visible');
+      toast.addEventListener('transitionend', () => toast.remove());
+    }, 2500);
   }
 }
 
-// Export for use in other modules
 window.SettingsManager = SettingsManager;

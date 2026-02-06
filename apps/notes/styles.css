@@ -187,31 +187,39 @@ body {
   color: var(--app-text-secondary);
 }
 
+/* Mobile back button (hidden on desktop) */
+.mobile-back-btn {
+  display: none;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
   .notes-layout {
     grid-template-columns: 1fr;
+    position: relative;
   }
 
   .notes-sidebar {
+    display: flex;
+  }
+
+  .note-editor-container {
     display: none;
   }
 
-  .notes-sidebar.mobile-show {
+  /* When a note is open on mobile: hide sidebar, show editor */
+  .notes-layout.mobile-editing .notes-sidebar {
+    display: none;
+  }
+
+  .notes-layout.mobile-editing .note-editor-container {
     display: flex;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 100;
   }
 
   .note-editor {
     margin: var(--space-2);
   }
 
-  /* Mobile back button */
   .mobile-back-btn {
     display: flex;
     align-items: center;
@@ -229,17 +237,5 @@ body {
 
   .mobile-back-btn:active {
     opacity: 0.7;
-  }
-
-  /* Mobile notes button in header */
-  .mobile-notes-btn {
-    display: flex;
-  }
-}
-
-@media (min-width: 769px) {
-  .mobile-back-btn,
-  .mobile-notes-btn {
-    display: none;
   }
 }
