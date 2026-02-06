@@ -1,3 +1,12 @@
+* Please remove the categories button in the top right header. 
+* The category button in the grid-toolbar should open the categories popup instead of toggling. It should also not show the name of the theme, but just say categories
+* The varies items in the category list does not have an on hover effect.
+* It is not possible to select other notes than the active one in mobile view
+* The search functionality should show with the results shown in a seperate window. It should not use the current lists of items.
+* The scrollbar in the dark modes (dark, futuristic) does not really follow the theme, if possible in a reasonable manner, please make it follow the theme.
+
+----
+
 Conduct a thorough review of the whole app, clean the code, fix bugs, remove unused code, fix comments (should not be excessive), any todos.
 
 ----
