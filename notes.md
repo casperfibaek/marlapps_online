@@ -1,4 +1,3 @@
-Add: Noise mixer
 Add: Fancy calculator
 Add: Converter
 Add: Timezones

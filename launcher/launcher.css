@@ -329,6 +329,10 @@ body.app-open .topbar-mobile-btn {
   padding: var(--space-5);
 }
 
+.main-content > * {
+  flex-shrink: 0;
+}
+
 .main-content.hidden {
   display: none;
 }
