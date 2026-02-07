@@ -1,9 +1,11 @@
-Please review all the six current apps for consistency, bugs, performance, and whether they follow the guide in readme.md.
+
+Add: Weight tracker
+----
+Create update button
+
 
 ----
-Add: Weight tracker
 Add: Timer (Alarm, Intervals, Timer)
-
 Add: Noise mixer
 Add: Fancy calculator
 Add: Converter 
