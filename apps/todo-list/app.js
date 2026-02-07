@@ -2,6 +2,7 @@
 
 class TodoList {
   constructor() {
+    this.migrateStorage();
     this.tasks = this.loadTasks();
     this.currentFilter = 'all';
     this.editingTaskId = null;
@@ -60,13 +61,21 @@ class TodoList {
     });
   }
 
+  migrateStorage() {
+    const old = localStorage.getItem('todoList');
+    if (old) {
+      localStorage.setItem('marlapps-todo-list', old);
+      localStorage.removeItem('todoList');
+    }
+  }
+
   loadTasks() {
-    const saved = localStorage.getItem('todoList');
+    const saved = localStorage.getItem('marlapps-todo-list');
     return saved ? JSON.parse(saved) : [];
   }
 
   saveTasks() {
-    localStorage.setItem('todoList', JSON.stringify(this.tasks));
+    localStorage.setItem('marlapps-todo-list', JSON.stringify(this.tasks));
   }
 
   addTask() {

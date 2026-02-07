@@ -81,7 +81,7 @@ class HabitTrackerApp {
 
     // Escape to close modal
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && this.habitModal.classList.contains('show')) {
+      if (e.key === 'Escape' && this.habitModal.classList.contains('active')) {
         this.closeModal();
       }
     });
@@ -97,14 +97,14 @@ class HabitTrackerApp {
   }
 
   openModal() {
-    this.habitModal.classList.add('show');
+    this.habitModal.classList.add('active');
     this.habitNameInput.value = '';
     this.habitNameInput.focus();
     document.querySelector('.color-option').click();
   }
 
   closeModal() {
-    this.habitModal.classList.remove('show');
+    this.habitModal.classList.remove('active');
   }
 
   saveHabit() {
@@ -253,10 +253,10 @@ class HabitTrackerApp {
 
     // Show/hide empty state
     if (this.habits.length === 0) {
-      this.emptyState.classList.add('show');
+      this.emptyState.classList.add('active');
       this.habitsGrid.style.display = 'none';
     } else {
-      this.emptyState.classList.remove('show');
+      this.emptyState.classList.remove('active');
       this.habitsGrid.style.display = 'flex';
       this.renderHabits();
     }

@@ -2,6 +2,7 @@
 
 class PomodoroTimer {
   constructor() {
+    this.migrateStorage();
     this.settings = this.loadSettings();
     this.state = this.loadState();
     this.timerInterval = null;
@@ -62,6 +63,24 @@ class PomodoroTimer {
     document.documentElement.setAttribute('data-theme', theme);
   }
 
+  migrateStorage() {
+    const oldSettings = localStorage.getItem('pomodoroSettings');
+    const oldState = localStorage.getItem('pomodoroState');
+    if (oldSettings || oldState) {
+      const merged = {};
+      if (oldSettings) merged.settings = JSON.parse(oldSettings);
+      if (oldState) merged.state = JSON.parse(oldState);
+      localStorage.setItem('marlapps-pomodoro-timer', JSON.stringify(merged));
+      localStorage.removeItem('pomodoroSettings');
+      localStorage.removeItem('pomodoroState');
+    }
+  }
+
+  loadData() {
+    const saved = localStorage.getItem('marlapps-pomodoro-timer');
+    return saved ? JSON.parse(saved) : {};
+  }
+
   loadSettings() {
     const defaultSettings = {
       workDuration: 25,
@@ -71,8 +90,8 @@ class PomodoroTimer {
       soundEnabled: true
     };
 
-    const saved = localStorage.getItem('pomodoroSettings');
-    return saved ? { ...defaultSettings, ...JSON.parse(saved) } : defaultSettings;
+    const data = this.loadData();
+    return data.settings ? { ...defaultSettings, ...data.settings } : defaultSettings;
   }
 
   loadState() {
@@ -84,18 +103,22 @@ class PomodoroTimer {
       lastUpdated: Date.now()
     };
 
-    const saved = localStorage.getItem('pomodoroState');
-    if (!saved) return defaultState;
+    const data = this.loadData();
+    if (!data.state) return defaultState;
 
-    const state = JSON.parse(saved);
+    const state = data.state;
 
-    // Adjust time if was active
     if (state.isActive) {
       const elapsed = Math.floor((Date.now() - state.lastUpdated) / 1000);
       state.timeRemaining = Math.max(0, state.timeRemaining - elapsed);
     }
 
     return state;
+  }
+
+  saveData() {
+    const data = { settings: this.settings, state: this.state };
+    localStorage.setItem('marlapps-pomodoro-timer', JSON.stringify(data));
   }
 
   saveSettings() {
@@ -107,10 +130,9 @@ class PomodoroTimer {
       soundEnabled: document.getElementById('soundEnabled').checked
     };
 
-    localStorage.setItem('pomodoroSettings', JSON.stringify(this.settings));
+    this.saveData();
     this.toggleSettings();
 
-    // Reset timer to new duration if in initial state
     if (!this.state.isActive && this.state.timeRemaining === this.getDurationForSession() * 60) {
       this.resetTimer();
     }
@@ -118,7 +140,7 @@ class PomodoroTimer {
 
   saveState() {
     this.state.lastUpdated = Date.now();
-    localStorage.setItem('pomodoroState', JSON.stringify(this.state));
+    this.saveData();
   }
 
   updateSettingsDisplay() {

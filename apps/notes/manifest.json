@@ -1,10 +1,13 @@
 {
   "id": "notes",
   "name": "Notes",
+  "shortName": "Notes",
   "description": "Quick note-taking with search",
   "icon": "icon.svg",
   "entry": "index.html",
   "categories": ["Notes", "Tools"],
+  "order": 4,
+  "storageKeys": ["marlapps-notes"],
   "version": "1.0.0",
   "author": "MarlApps"
 }

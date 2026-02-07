@@ -2,6 +2,7 @@
 
 class MirrorApp {
   constructor() {
+    this.migrateStorage();
     this.stream = null;
     this.facingMode = 'user';
     this.photos = this.loadPhotos();
@@ -257,8 +258,16 @@ class MirrorApp {
     }, 100);
   }
 
+  migrateStorage() {
+    const old = localStorage.getItem('marlapps-mirror-photos');
+    if (old) {
+      localStorage.setItem('marlapps-mirror', old);
+      localStorage.removeItem('marlapps-mirror-photos');
+    }
+  }
+
   loadPhotos() {
-    const saved = localStorage.getItem('marlapps-mirror-photos');
+    const saved = localStorage.getItem('marlapps-mirror');
     return saved ? JSON.parse(saved) : [];
   }
 
@@ -267,7 +276,7 @@ class MirrorApp {
     if (this.photos.length > 20) {
       this.photos = this.photos.slice(0, 20);
     }
-    localStorage.setItem('marlapps-mirror-photos', JSON.stringify(this.photos));
+    localStorage.setItem('marlapps-mirror', JSON.stringify(this.photos));
   }
 
   deletePhoto(photoId) {

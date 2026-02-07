@@ -217,7 +217,7 @@ class NotesApp {
 
   renderNotesList() {
     if (this.notes.length === 0) {
-      this.notesList.innerHTML = '<div style="padding: 2rem; text-align: center; color: var(--notes-text-tertiary);">No notes yet</div>';
+      this.notesList.innerHTML = '<div style="padding: 2rem; text-align: center; color: var(--app-text-tertiary);">No notes yet</div>';
       return;
     }
 

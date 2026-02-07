@@ -1,10 +1,13 @@
 {
   "id": "habits",
   "name": "Habit Tracker",
+  "shortName": "Habits",
   "description": "Daily habit tracking with streaks",
   "icon": "icon.svg",
   "entry": "index.html",
   "categories": ["Personal", "Planning"],
+  "order": 5,
+  "storageKeys": ["marlapps-habits"],
   "version": "1.0.0",
   "author": "MarlApps"
 }

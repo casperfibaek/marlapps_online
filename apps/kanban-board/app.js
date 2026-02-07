@@ -2,6 +2,7 @@
 
 class KanbanBoard {
   constructor() {
+    this.migrateStorage();
     this.board = this.loadBoard();
     this.currentColumnId = null;
     this.editingTaskId = null;
@@ -57,6 +58,14 @@ class KanbanBoard {
     document.documentElement.setAttribute('data-theme', theme);
   }
 
+  migrateStorage() {
+    const old = localStorage.getItem('kanbanBoard');
+    if (old) {
+      localStorage.setItem('marlapps-kanban-board', old);
+      localStorage.removeItem('kanbanBoard');
+    }
+  }
+
   loadBoard() {
     const defaultBoard = {
       columns: [
@@ -66,12 +75,12 @@ class KanbanBoard {
       ]
     };
 
-    const saved = localStorage.getItem('kanbanBoard');
+    const saved = localStorage.getItem('marlapps-kanban-board');
     return saved ? JSON.parse(saved) : defaultBoard;
   }
 
   saveBoard() {
-    localStorage.setItem('kanbanBoard', JSON.stringify(this.board));
+    localStorage.setItem('marlapps-kanban-board', JSON.stringify(this.board));
   }
 
   attachEventListeners() {

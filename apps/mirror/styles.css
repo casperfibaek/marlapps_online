@@ -355,7 +355,7 @@
   .filter-btn {
     padding: var(--space-2) var(--space-3);
     font-size: 0.8rem;
-    min-height: 36px;
+    min-height: var(--touch-target-min);
   }
 
   .gallery-grid {

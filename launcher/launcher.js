@@ -24,6 +24,15 @@ class Launcher {
     this.renderApps();
 
     document.body.classList.add('loaded');
+
+    // Handle ?app= shortcut parameter (from PWA manifest shortcuts)
+    const params = new URLSearchParams(window.location.search);
+    const appParam = params.get('app');
+    if (appParam && this.appLoader.getAppById(appParam)) {
+      this.openApp(appParam);
+      // Clean URL without reloading
+      window.history.replaceState({}, '', window.location.pathname);
+    }
   }
 
   bindEvents() {

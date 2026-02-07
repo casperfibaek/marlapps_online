@@ -1,7 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "Bash(wc:*)"
+      "Bash(wc:*)",
+      "Bash(del \"c:\\\\Users\\\\caspe\\\\Desktop\\\\marlapps\\\\pwa-test.html\")",
+      "Bash(test:*)",
+      "Bash(node build.js:*)"
     ]
   }
 }

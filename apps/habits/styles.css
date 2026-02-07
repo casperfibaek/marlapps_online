@@ -186,7 +186,11 @@
   background: var(--app-danger-hover);
 }
 
-.empty-state.show {
+.empty-state {
+  display: none;
+}
+
+.empty-state.active {
   display: flex;
 }
 

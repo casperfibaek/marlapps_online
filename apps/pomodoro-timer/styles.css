@@ -222,16 +222,8 @@ body {
 
 /* Active State Animations */
 .timer-display.active {
+  --pulse-color: var(--app-accent);
   animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    box-shadow: 0 8px 24px rgba(231, 76, 60, 0.3);
-  }
-  50% {
-    box-shadow: 0 8px 32px rgba(231, 76, 60, 0.5);
-  }
 }
 
 /* Break state */
@@ -244,14 +236,14 @@ body {
 }
 
 .timer-display.break.active {
-  animation: pulse-break 2s ease-in-out infinite;
+  --pulse-color: var(--app-success);
 }
 
-@keyframes pulse-break {
+@keyframes pulse {
   0%, 100% {
-    box-shadow: 0 8px 24px rgba(39, 174, 96, 0.3);
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--pulse-color) 30%, transparent);
   }
   50% {
-    box-shadow: 0 8px 32px rgba(39, 174, 96, 0.5);
+    box-shadow: 0 8px 32px color-mix(in srgb, var(--pulse-color) 50%, transparent);
   }
 }

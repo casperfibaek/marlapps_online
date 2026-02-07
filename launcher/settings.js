@@ -6,26 +6,8 @@ class SettingsManager {
     this.overlay = null;
     this.isOpen = false;
 
-    this.storageKeys = [
-      'todoList',
-      'kanbanBoard',
-      'pomodoroSettings',
-      'pomodoroState',
-      'marlapps-notes',
-      'marlapps-habits',
-      'marlapps-mirror-photos',
-      'marlapps-recents',
-      'marlapps-theme'
-    ];
-
-    this.appStorageMap = {
-      'todo-list': { name: 'Todo List', keys: ['todoList'] },
-      'kanban-board': { name: 'Kanban Board', keys: ['kanbanBoard'] },
-      'pomodoro-timer': { name: 'Pomodoro Timer', keys: ['pomodoroSettings', 'pomodoroState'] },
-      'notes': { name: 'Notes', keys: ['marlapps-notes'] },
-      'habits': { name: 'Habits', keys: ['marlapps-habits'] },
-      'mirror': { name: 'Mirror Photos', keys: ['marlapps-mirror-photos'] }
-    };
+    this.appStorageMap = {};
+    this.storageKeys = ['marlapps-recents', 'marlapps-theme'];
   }
 
   init() {
@@ -37,9 +19,39 @@ class SettingsManager {
       return this;
     }
 
+    this.buildStorageMaps();
+    this.populateDeleteDropdown();
     this.bindEvents();
     this.updateThemeSelector();
     return this;
+  }
+
+  buildStorageMaps() {
+    for (const app of this.appLoader.apps) {
+      if (app.storageKeys && app.storageKeys.length) {
+        this.appStorageMap[app.id] = { name: app.name, keys: app.storageKeys };
+        this.storageKeys.push(...app.storageKeys);
+      }
+    }
+  }
+
+  populateDeleteDropdown() {
+    const select = document.getElementById('deleteAppSelect');
+    if (!select) return;
+
+    // Remove existing options except the placeholder
+    while (select.options.length > 1) {
+      select.remove(1);
+    }
+
+    for (const app of this.appLoader.apps) {
+      if (app.storageKeys && app.storageKeys.length) {
+        const option = document.createElement('option');
+        option.value = app.id;
+        option.textContent = app.name;
+        select.appendChild(option);
+      }
+    }
   }
 
   bindEvents() {

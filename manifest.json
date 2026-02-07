@@ -8,7 +8,10 @@
   "background_color": "#0a0a0f",
   "theme_color": "#6366f1",
   "orientation": "any",
-  "categories": ["productivity", "utilities"],
+  "categories": [
+    "productivity",
+    "utilities"
+  ],
   "icons": [
     {
       "src": "./icons/icon-72x72.png",
@@ -57,19 +60,79 @@
       "name": "Pomodoro Timer",
       "short_name": "Pomodoro",
       "description": "Focus timer with work/break intervals",
-      "url": "./index.html?app=pomodoro-timer"
+      "url": "./index.html?app=pomodoro-timer",
+      "icons": [
+        {
+          "src": "./apps/pomodoro-timer/icon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
     },
     {
       "name": "Kanban Board",
       "short_name": "Kanban",
-      "description": "Visual task management",
-      "url": "./index.html?app=kanban-board"
+      "description": "Visual task management with drag-and-drop",
+      "url": "./index.html?app=kanban-board",
+      "icons": [
+        {
+          "src": "./apps/kanban-board/icon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
     },
     {
       "name": "Todo List",
       "short_name": "Todo",
-      "description": "Simple task management",
-      "url": "./index.html?app=todo-list"
+      "description": "Simple task management with filters",
+      "url": "./index.html?app=todo-list",
+      "icons": [
+        {
+          "src": "./apps/todo-list/icon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "Notes",
+      "short_name": "Notes",
+      "description": "Quick note-taking with search",
+      "url": "./index.html?app=notes",
+      "icons": [
+        {
+          "src": "./apps/notes/icon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "Habit Tracker",
+      "short_name": "Habits",
+      "description": "Daily habit tracking with streaks",
+      "url": "./index.html?app=habits",
+      "icons": [
+        {
+          "src": "./apps/habits/icon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "Mirror",
+      "short_name": "Mirror",
+      "description": "Webcam mirror with filters and capture",
+      "url": "./index.html?app=mirror",
+      "icons": [
+        {
+          "src": "./apps/mirror/icon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
     }
   ]
 }

@@ -1,10 +1,13 @@
 {
   "id": "pomodoro-timer",
   "name": "Pomodoro Timer",
+  "shortName": "Pomodoro",
   "description": "Focus timer with work/break intervals",
   "icon": "icon.svg",
   "entry": "index.html",
   "categories": ["Focus", "Tools"],
+  "order": 1,
+  "storageKeys": ["marlapps-pomodoro-timer"],
   "version": "1.0.0",
   "author": "MarlApps",
   "permissions": ["notifications"],
