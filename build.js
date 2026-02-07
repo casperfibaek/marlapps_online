@@ -90,6 +90,19 @@ function patchServiceWorker(apps) {
   });
 
   fs.writeFileSync(swPath, content);
+
+  // Extract the new version number and write version.json
+  const versionMatch = content.match(/const CACHE_NAME = 'marlapps-v(\d+)'/);
+  if (versionMatch) {
+    const version = parseInt(versionMatch[1], 10);
+    const versionData = {
+      version,
+      buildDate: new Date().toISOString()
+    };
+    fs.writeFileSync(path.join(ROOT, 'version.json'), JSON.stringify(versionData, null, 2) + '\n');
+    console.log(`  version.json (build ${version})`);
+  }
+
   console.log(`  service-worker.js (${apps.length * files.length} cached files)`);
 }
 

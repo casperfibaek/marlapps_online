@@ -1,4 +1,4 @@
-const CACHE_NAME = 'marlapps-v25';
+const CACHE_NAME = 'marlapps-v26';
 const urlsToCache = [
   './',
   './index.html',
@@ -102,6 +102,12 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+  // Always fetch version.json from network — never serve from cache
+  if (event.request.url.endsWith('/version.json')) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request)
       .then((response) => {
@@ -128,5 +134,10 @@ self.addEventListener('fetch', (event) => {
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
+  }
+  if (event.data && event.data.type === 'GET_VERSION') {
+    const match = CACHE_NAME.match(/marlapps-v(\d+)/);
+    const version = match ? parseInt(match[1], 10) : 0;
+    event.ports[0].postMessage({ version });
   }
 });

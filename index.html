@@ -283,12 +283,34 @@
         </div>
       </section>
 
+      <!-- Updates Section -->
+      <section class="settings-section">
+        <h3>Updates</h3>
+        <div class="update-toggle-row">
+          <span class="update-toggle-label">Check on startup</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="autoUpdateCheck" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <button class="action-btn" id="checkUpdateBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <polyline points="23,4 23,10 17,10"/>
+            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+          </svg>
+          <span>Check for updates</span>
+        </button>
+        <div class="update-status hidden" id="updateStatus">
+          <span class="update-status-text" id="updateStatusText"></span>
+        </div>
+      </section>
+
       <!-- About Section -->
       <section class="settings-section">
         <h3>About</h3>
         <div class="about-info">
           <p class="app-name">MarlApps</p>
-          <p class="app-version">Version 2.0.0</p>
+          <p class="app-version" id="appVersion">Version 2.0.0</p>
           <p class="app-description">A personal productivity suite that runs entirely in your browser. All your data stays on your device.</p>
         </div>
       </section>

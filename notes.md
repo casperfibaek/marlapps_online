@@ -1,6 +1,3 @@
-
-Add: Weight tracker
-----
 Create update button
 
 

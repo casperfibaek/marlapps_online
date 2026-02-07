@@ -23,6 +23,8 @@ class SettingsManager {
     this.populateDeleteDropdown();
     this.bindEvents();
     this.updateThemeSelector();
+    this.initUpdateSection();
+    this.updateAboutVersion();
     return this;
   }
 
@@ -280,6 +282,185 @@ class SettingsManager {
 
     this.showNotification('All data has been reset. Reloading...');
     setTimeout(() => location.reload(), 1500);
+  }
+
+  // --- Updates ---
+
+  initUpdateSection() {
+    const autoCheckToggle = document.getElementById('autoUpdateCheck');
+    const checkBtn = document.getElementById('checkUpdateBtn');
+
+    if (autoCheckToggle) {
+      const saved = localStorage.getItem('marlapps-auto-update-check');
+      autoCheckToggle.checked = saved !== 'false';
+      autoCheckToggle.addEventListener('change', () => {
+        localStorage.setItem('marlapps-auto-update-check', autoCheckToggle.checked ? 'true' : 'false');
+      });
+    }
+
+    if (checkBtn) {
+      checkBtn.addEventListener('click', () => this.checkForUpdates(true));
+    }
+  }
+
+  async getInstalledVersion() {
+    if (!navigator.serviceWorker || !navigator.serviceWorker.controller) return null;
+    return new Promise((resolve) => {
+      const channel = new MessageChannel();
+      channel.port1.onmessage = (e) => resolve(e.data.version);
+      navigator.serviceWorker.controller.postMessage(
+        { type: 'GET_VERSION' },
+        [channel.port2]
+      );
+      setTimeout(() => resolve(null), 2000);
+    });
+  }
+
+  async checkForUpdates(showStatus) {
+    const statusEl = document.getElementById('updateStatus');
+    const textEl = document.getElementById('updateStatusText');
+    if (!statusEl || !textEl) return;
+
+    if (showStatus) {
+      statusEl.className = 'update-status checking';
+      textEl.innerHTML = '<span class="update-spinner"></span>Checking...';
+    }
+
+    try {
+      const response = await fetch('./version.json', { cache: 'no-store' });
+      if (!response.ok) throw new Error('Failed to fetch version');
+      const remote = await response.json();
+      const installed = await this.getInstalledVersion();
+
+      if (installed === null) {
+        if (showStatus) {
+          statusEl.className = 'update-status';
+          textEl.textContent = 'Could not determine installed version';
+        }
+        return;
+      }
+
+      if (remote.version > installed) {
+        statusEl.className = 'update-status available';
+        textEl.textContent = `Update available (build ${remote.version})`;
+        // Add install button if not already present
+        if (!statusEl.querySelector('.update-install-btn')) {
+          const btn = document.createElement('button');
+          btn.className = 'update-install-btn';
+          btn.textContent = 'Install';
+          btn.addEventListener('click', () => this.installUpdate());
+          statusEl.appendChild(btn);
+        }
+        return { updateAvailable: true, remoteVersion: remote.version };
+      } else {
+        if (showStatus) {
+          statusEl.className = 'update-status up-to-date';
+          textEl.textContent = `Up to date (build ${installed})`;
+          // Remove install button if present
+          const btn = statusEl.querySelector('.update-install-btn');
+          if (btn) btn.remove();
+        } else {
+          statusEl.className = 'update-status hidden';
+        }
+        return { updateAvailable: false };
+      }
+    } catch (e) {
+      if (showStatus) {
+        statusEl.className = 'update-status';
+        textEl.textContent = 'Could not check for updates';
+      }
+      return null;
+    }
+  }
+
+  async installUpdate() {
+    const statusEl = document.getElementById('updateStatus');
+    const textEl = document.getElementById('updateStatusText');
+    if (statusEl && textEl) {
+      statusEl.className = 'update-status checking';
+      textEl.innerHTML = '<span class="update-spinner"></span>Installing update...';
+      const btn = statusEl.querySelector('.update-install-btn');
+      if (btn) btn.remove();
+    }
+
+    try {
+      const reg = window.__swRegistration;
+      if (!reg) {
+        this.showNotification('Service worker not available. Try reloading.');
+        return;
+      }
+
+      // Force the browser to check for a new service worker
+      await reg.update();
+
+      // Wait for the new SW to be found and installed
+      const newWorker = await new Promise((resolve, reject) => {
+        if (reg.installing) {
+          resolve(reg.installing);
+          return;
+        }
+
+        reg.addEventListener('updatefound', () => {
+          resolve(reg.installing);
+        }, { once: true });
+
+        // Timeout after 15s
+        setTimeout(() => reject(new Error('Update check timed out')), 15000);
+      });
+
+      // Wait for it to finish installing
+      await new Promise((resolve, reject) => {
+        if (newWorker.state === 'installed') {
+          resolve();
+          return;
+        }
+        newWorker.addEventListener('statechange', () => {
+          if (newWorker.state === 'installed') resolve();
+          if (newWorker.state === 'redundant') reject(new Error('Update failed'));
+        });
+        setTimeout(() => reject(new Error('Install timed out')), 30000);
+      });
+
+      // Tell the new SW to activate immediately
+      newWorker.postMessage({ type: 'SKIP_WAITING' });
+
+      // Reload once the new SW takes over
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        window.location.reload();
+      }, { once: true });
+
+    } catch (e) {
+      // Fallback: just clear caches and reload
+      if ('caches' in window) {
+        const keys = await caches.keys();
+        await Promise.all(keys.map(k => caches.delete(k)));
+      }
+      this.showNotification('Updating... Page will reload.');
+      setTimeout(() => window.location.reload(), 1000);
+    }
+  }
+
+  async autoCheckForUpdates() {
+    const autoCheck = localStorage.getItem('marlapps-auto-update-check');
+    if (autoCheck === 'false') return;
+
+    // Small delay to not block startup
+    await new Promise(r => setTimeout(r, 2000));
+
+    const result = await this.checkForUpdates(false);
+    if (result && result.updateAvailable) {
+      this.showNotification('A new update is available — open Settings to install.');
+    }
+  }
+
+  async updateAboutVersion() {
+    const versionEl = document.getElementById('appVersion');
+    if (!versionEl) return;
+
+    const installed = await this.getInstalledVersion();
+    if (installed !== null) {
+      versionEl.textContent = `Version 2.0.0 (build ${installed})`;
+    }
   }
 
   showNotification(message) {

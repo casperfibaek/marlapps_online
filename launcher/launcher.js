@@ -25,6 +25,9 @@ class Launcher {
 
     document.body.classList.add('loaded');
 
+    // Check for updates on startup (respects user preference)
+    this.settingsManager.autoCheckForUpdates();
+
     // Handle ?app= shortcut parameter (from PWA manifest shortcuts)
     const params = new URLSearchParams(window.location.search);
     const appParam = params.get('app');
